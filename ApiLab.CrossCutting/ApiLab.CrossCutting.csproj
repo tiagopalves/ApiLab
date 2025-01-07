@@ -11,6 +11,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Scalar.AspNetCore" Version="1.2.73" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="7.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Apilab.Application\Apilab.Application.csproj" />
     <ProjectReference Include="..\ApiLab.Domain\ApiLab.Domain.csproj" />
   </ItemGroup>

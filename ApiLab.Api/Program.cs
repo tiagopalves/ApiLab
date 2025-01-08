@@ -1,39 +1,66 @@
 using Scalar.AspNetCore;
+using Serilog;
 
-var builder = WebApplication.CreateBuilder(args);
+//TODO: Verificar se é a melhor forma de configurar o Serilog
+var configuration = new ConfigurationBuilder()
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.json")
+    .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", true)
+    .Build();
 
-builder.Services.AddControllers();
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(configuration)
+    .CreateLogger();
 
-builder.Services.AddOpenApi();
-//builder.Services.AddSwaggerGen(); //Forma antiga de usar o swagger
-
-var app = builder.Build();
-
-if (app.Environment.IsDevelopment())
+try
 {
-    //Forma antiga de usar o swagger
-    //app.UseSwagger();
-    //app.UseSwaggerUI();
+    var builder = WebApplication.CreateBuilder(args);
 
-    //Forma de usar o swagger com o OpenApi do .Net Core 9
-    //app.MapOpenApi();
-    //app.UseSwaggerUI(options =>
-    //{
-    //    options.SwaggerEndpoint("/openapi/v1.json", "Api Lab");
-    //});
+    builder.Host.UseSerilog();
 
-    //Nova forma usando Scalar
-    app.MapOpenApi();
-    app.MapScalarApiReference(options =>
-    { 
-        options
-            .WithTitle("Lab Api")
-            .WithTheme(ScalarTheme.BluePlanet)
-            .WithDefaultHttpClient(ScalarTarget.CSharp, ScalarClient.HttpClient);
-    });
+    Log.Information("Iniciando a aplicação...");
+
+    builder.Services.AddControllers();
+    builder.Services.AddOpenApi();
+    //builder.Services.AddSwaggerGen(); //Forma antiga de usar o swagger
+
+    var app = builder.Build();
+
+    if (app.Environment.IsDevelopment())
+    {
+        //Forma antiga de usar o swagger
+        //app.UseSwagger();
+        //app.UseSwaggerUI();
+
+        //Forma de usar o swagger com o OpenApi do .Net Core 9
+        //app.MapOpenApi();
+        //app.UseSwaggerUI(options =>
+        //{
+        //    options.SwaggerEndpoint("/openapi/v1.json", "Api Lab");
+        //});
+
+        //Nova forma usando Scalar
+        app.MapOpenApi();
+        app.MapScalarApiReference(options =>
+        {
+            options
+                .WithTitle("Lab Api")
+                .WithTheme(ScalarTheme.BluePlanet)
+                .WithDefaultHttpClient(ScalarTarget.CSharp, ScalarClient.HttpClient);
+        });
+    }
+
+    app.UseHttpsRedirection();
+    app.UseAuthorization();
+    app.MapControllers();
+    app.Run();
 }
-
-app.UseHttpsRedirection();
-app.UseAuthorization();
-app.MapControllers();
-app.Run();
+catch (Exception ex)
+{
+    Log.Fatal(ex, "Ocorreu um erro ao iniciar a aplicação!");
+}
+finally
+{
+    Log.Information("Encerrando a aplicação...");
+    Log.CloseAndFlush();
+};

@@ -1,20 +1,14 @@
 using Scalar.AspNetCore;
 using Serilog;
 
-//TODO: Verificar se é a melhor forma de configurar o Serilog
-var configuration = new ConfigurationBuilder()
-    .SetBasePath(Directory.GetCurrentDirectory())
-    .AddJsonFile("appsettings.json")
-    .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", true)
-    .Build();
-
-Log.Logger = new LoggerConfiguration()
-    .ReadFrom.Configuration(configuration)
-    .CreateLogger();
-
 try
 {
     var builder = WebApplication.CreateBuilder(args);
+
+    //Configuração do Serilog
+    Log.Logger = new LoggerConfiguration()
+        .ReadFrom.Configuration(builder.Configuration)
+        .CreateLogger();
 
     builder.Host.UseSerilog();
 

@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="ApiLab.Api/ApiLab.Api.csproj" />
+    <Project Path="Apilab.Application/Apilab.Application.csproj" />
+    <Project Path="ApiLab.CrossCutting/ApiLab.CrossCutting.csproj" />
+    <Project Path="ApiLab.Domain/ApiLab.Domain.csproj" />
+    <Project Path="ApiLab.Infra/ApiLab.Infra.csproj" />
+    <Project Path="ApiLab.UnitTests/ApiLab.UnitTests.csproj" />
+  </Folder>
+</Solution>

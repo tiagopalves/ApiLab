@@ -1,10 +1,21 @@
 <Solution>
-  <Folder Name="/src/">
+  <Folder Name="/src/" />
+  <Folder Name="/src/01 - API/">
     <Project Path="ApiLab.Api/ApiLab.Api.csproj" />
+  </Folder>
+  <Folder Name="/src/02 - Application/">
     <Project Path="Apilab.Application/Apilab.Application.csproj" />
+  </Folder>
+  <Folder Name="/src/03 - CrossCutting/">
     <Project Path="ApiLab.CrossCutting/ApiLab.CrossCutting.csproj" />
+  </Folder>
+  <Folder Name="/src/04 - Domain/">
     <Project Path="ApiLab.Domain/ApiLab.Domain.csproj" />
+  </Folder>
+  <Folder Name="/src/05 - Infra/">
     <Project Path="ApiLab.Infra/ApiLab.Infra.csproj" />
+  </Folder>
+  <Folder Name="/src/06 - Tests/">
     <Project Path="ApiLab.UnitTests/ApiLab.UnitTests.csproj" />
   </Folder>
 </Solution>

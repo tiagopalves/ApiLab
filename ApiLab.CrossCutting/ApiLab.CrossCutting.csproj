@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Configurations\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Scalar.AspNetCore" Version="1.2.74" />
     <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
     <PackageReference Include="Serilog.Sinks.Seq" Version="9.0.0" />
@@ -20,6 +16,25 @@
   <ItemGroup>
     <ProjectReference Include="..\Apilab.Application\Apilab.Application.csproj" />
     <ProjectReference Include="..\ApiLab.Domain\ApiLab.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Configurations\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Resources\FriendlyMessages.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>FriendlyMessages.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\FriendlyMessages.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>FriendlyMessages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>

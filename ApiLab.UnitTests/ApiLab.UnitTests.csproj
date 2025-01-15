@@ -24,10 +24,4 @@
     <Using Include="Xunit" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Infra\" />
-    <Folder Include="CrossCutting\" />
-    <Folder Include="Application\" />
-  </ItemGroup>
-
 </Project>

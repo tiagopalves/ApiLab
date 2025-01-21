@@ -61,11 +61,65 @@ namespace ApiLab.CrossCutting.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Erro ao gravar o log da aplicação!.
+        ///   Consulta uma cadeia de caracteres localizada semelhante a ApiLab - Laboratório.
         /// </summary>
-        internal static string LogError {
+        internal static string ApiDescription {
             get {
-                return ResourceManager.GetString("LogError", resourceCulture);
+                return ResourceManager.GetString("ApiDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Falha na inicialização da aplicação - Erro: .
+        /// </summary>
+        internal static string AppEnd {
+            get {
+                return ResourceManager.GetString("AppEnd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Aplicação inicializada..
+        /// </summary>
+        internal static string AppStarted {
+            get {
+                return ResourceManager.GetString("AppStarted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Ocorreu uma falha na sua solicitação. Por favor, tente novamente..
+        /// </summary>
+        internal static string GeneralFail {
+            get {
+                return ResourceManager.GetString("GeneralFail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Ocorreu uma falha na validação do payload de entrada..
+        /// </summary>
+        internal static string GeneralFailValidation {
+            get {
+                return ResourceManager.GetString("GeneralFailValidation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Erro na execução do serviço..
+        /// </summary>
+        internal static string ServiceExecutionError {
+            get {
+                return ResourceManager.GetString("ServiceExecutionError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Campo não encontrado..
+        /// </summary>
+        internal static string ValidatorNotFound {
+            get {
+                return ResourceManager.GetString("ValidatorNotFound", resourceCulture);
             }
         }
     }

@@ -1,3 +1,4 @@
+using Apilab.Application.AppServices.Interfaces;
 using ApiLab.CrossCutting.LogManager.Interfaces;
 using ApiLab.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
@@ -6,9 +7,10 @@ namespace ApiLab.Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class LabController(ILogManager logManager) : ControllerBase
+    public class LabController(ILogManager logManager, ILabService labService) : ControllerBase
     {
         private readonly ILogManager _logManager = logManager;
+        private readonly ILabService _labService = labService;
 
         private static readonly string[] Summaries =
         [

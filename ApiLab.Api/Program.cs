@@ -1,3 +1,4 @@
+using ApiLab.CrossCutting.LogManager.Extensions;
 using Scalar.AspNetCore;
 using Serilog;
 
@@ -17,6 +18,8 @@ try
     builder.Services.AddControllers();
     builder.Services.AddOpenApi();
     //builder.Services.AddSwaggerGen(); //Forma antiga de usar o swagger
+
+    builder.Services.AddLoggingService();
 
     var app = builder.Build();
 

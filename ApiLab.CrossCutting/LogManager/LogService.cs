@@ -1,32 +1,59 @@
-﻿using ApiLab.CrossCutting.LogManager.Interfaces;
+﻿using ApiLab.CrossCutting.Common.Constants;
+using ApiLab.CrossCutting.LogManager.Interfaces;
+using Microsoft.Extensions.Logging;
+using Serilog.Context;
+using Serilog.Events;
 
 namespace ApiLab.CrossCutting.LogManager
 {
-    public class LogService : ILogService
+    public class LogService(ILogger<LogService> logger) : ILogService
     {
+        private readonly ILogger<LogService> _logger = logger;
+
         public void Write(IList<LogInfo> logInfos, string? prefix = "")
         {
-            throw new NotImplementedException();
+            foreach (var logInfo in logInfos)
+            {
+                Write(logInfo, prefix);
+            }
         }
 
         public void Write(LogInfo logInfo, string? prefix = "")
         {
-            throw new NotImplementedException();
+            var levelId = (int)logInfo.Level;
+            var level = (LogEventLevel)levelId;
+
+            var message = logInfo.Message;
+
+            if (!string.IsNullOrEmpty(logInfo.Code))
+                message = $"{logInfo.Code} - {message}";
+            else if (!string.IsNullOrEmpty(prefix))
+                message = $"{prefix} - {message}";
+
+            WriteLog(level, message, logInfo.Exception, logInfo.InformationData, logInfo.CorrelationId, logInfo.FlowId);
         }
 
-        public void LogInfo(string message, object? data = null)
-        {
-            throw new NotImplementedException();
-        }
+        public void LogInformation(string message, object? data = null) =>
+             WriteLog(LogEventLevel.Information, message, null, data);
 
-        public void LogWarning(string message, Exception? exception = null, object? data = null)
-        {
-            throw new NotImplementedException();
-        }
-        public void LogError(string message, Exception exception, object? data = null)
-        {
-            throw new NotImplementedException();
-        }
+        public void LogWarning(string message, Exception? exception = null, object? data = null) =>
+            WriteLog(LogEventLevel.Warning, message, exception, data);
 
+        public void LogError(string message, Exception? exception = null, object? data = null) =>
+            WriteLog(LogEventLevel.Error, message, exception, data);
+
+        private void WriteLog(LogEventLevel level, string message, Exception? exception = null, object? data = null, string? correlationId = null, string? flowId = null)
+        {
+            using (LogContext.PushProperty(Constants.CORRELATION_HEADER_KEY, correlationId ?? string.Empty))
+            using (LogContext.PushProperty(Constants.FLOW_ID_HEADER_KEY, flowId ?? string.Empty))
+            {
+                var msg = "{@InformationData}";
+
+                var sep = data != null ? " - " : string.Empty;
+                msg = $"{message}{sep}{msg}";
+
+                _logger.Log(logLevel: (LogLevel)level, message: msg, args: data ?? string.Empty, exception: exception);
+            }
+        }
     }
 }

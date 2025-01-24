@@ -5,17 +5,11 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace ApiLab.CrossCutting.LogManager
 {
-    public class LogManager : ILogManager
+    public class LogManager(IIssuer issuer,
+                            ILogService logService) : ILogManager
     {
-        private readonly IIssuer _issuer;
-        private readonly ILogService _logService;
-
-        public LogManager(IIssuer issuer,
-                          ILogService logService)
-        {
-            _issuer = issuer;
-            _logService = logService;
-        }
+        private readonly IIssuer _issuer = issuer;
+        private readonly ILogService _logService = logService;
 
         public void AddTrace(string message, string correlationId = "", string flowId = "", object? informationData = null)
         {

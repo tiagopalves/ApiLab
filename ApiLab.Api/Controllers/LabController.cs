@@ -1,3 +1,4 @@
+using ApiLab.CrossCutting.LogManager.Interfaces;
 using ApiLab.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
@@ -5,21 +6,19 @@ namespace ApiLab.Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class LabController : ControllerBase
+    public class LabController(ILogManager logManager) : ControllerBase
     {
+        private readonly ILogManager _logManager = logManager;
+
         private static readonly string[] Summaries =
         [
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         ];
 
-        private readonly ILogger<LabController> _logger;
-
-        public LabController(ILogger<LabController> logger) => _logger = logger;
-
         [HttpGet]
         public IEnumerable<WeatherForecast> GetWeatherForecast()
         {
-            _logger.LogInformation($"Início do método {nameof(GetWeatherForecast)}");
+            _logManager.AddInformation($"Início do método {nameof(GetWeatherForecast)}");
 
             var retorno = Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
@@ -29,7 +28,7 @@ namespace ApiLab.Api.Controllers
             })
             .ToArray();
             
-            _logger.LogInformation($"Fim do método {nameof(GetWeatherForecast)}");
+            _logManager.AddInformation($"Fim do método {nameof(GetWeatherForecast)}");
 
             return retorno;
         }

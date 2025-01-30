@@ -1,5 +1,7 @@
 using ApiLab.Api.Common.IoC;
 using ApiLab.CrossCutting.LogManager.Extensions;
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Scalar.AspNetCore;
 using Serilog;
 
@@ -11,15 +13,26 @@ try
     Log.Logger = new LoggerConfiguration()
         .ReadFrom.Configuration(builder.Configuration)
         .CreateLogger();
+    Log.Information("Iniciando a aplicação...");
 
     builder.Host.UseSerilog();
-
-    Log.Information("Iniciando a aplicação...");
 
     builder.Services.AddControllers();
     builder.Services.AddOpenApi();
     //builder.Services.AddSwaggerGen(); //Forma antiga de usar o swagger
 
+    builder.Services.AddHealthChecks();
+        //.AddRedis(""); //TODO: Configurar Redis
+    builder.Services.AddHealthChecksUI(options =>
+        {
+            options.SetEvaluationTimeInSeconds(30);
+            options.MaximumHistoryEntriesPerEndpoint(10);
+            options.AddHealthCheckEndpoint("Api Lab", "/health");
+        })
+        .AddInMemoryStorage();
+    
+
+    //Meus serviços
     builder.Services.AddLoggingService();
     builder.Services.AddServices();
 
@@ -51,6 +64,12 @@ try
 
     app.UseHttpsRedirection();
     app.UseAuthorization();
+    app.UseHealthChecks("/health", new HealthCheckOptions
+    {
+        Predicate = _ => true,
+        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+    });
+    app.UseHealthChecksUI();
     app.MapControllers();
     app.Run();
 }

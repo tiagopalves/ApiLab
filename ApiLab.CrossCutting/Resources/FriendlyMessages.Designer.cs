@@ -22,7 +22,7 @@ namespace ApiLab.CrossCutting.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class FriendlyMessages {
+    public class FriendlyMessages {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace ApiLab.CrossCutting.Resources {
         ///   Retorna a instância de ResourceManager armazenada em cache usada por essa classe.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ApiLab.CrossCutting.Resources.FriendlyMessages", typeof(FriendlyMessages).Assembly);
@@ -51,7 +51,7 @@ namespace ApiLab.CrossCutting.Resources {
         ///   pesquisas de recursos que usam essa classe de recurso de tipo de alta segurança.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,34 +63,43 @@ namespace ApiLab.CrossCutting.Resources {
         /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a ApiLab - Laboratório.
         /// </summary>
-        internal static string ApiDescription {
+        public static string ApiDescription {
             get {
                 return ResourceManager.GetString("ApiDescription", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Falha na inicialização da aplicação - Erro: .
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Encerrando a aplicação....
         /// </summary>
-        internal static string AppEnd {
+        public static string AppEnding {
             get {
-                return ResourceManager.GetString("AppEnd", resourceCulture);
+                return ResourceManager.GetString("AppEnding", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Aplicação inicializada..
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Inicializando a aplicação....
         /// </summary>
-        internal static string AppStarted {
+        public static string AppStarting {
             get {
-                return ResourceManager.GetString("AppStarted", resourceCulture);
+                return ResourceManager.GetString("AppStarting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Falha na inicialização da aplicação - Erro: .
+        /// </summary>
+        public static string AppStartingError {
+            get {
+                return ResourceManager.GetString("AppStartingError", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Ocorreu uma falha na sua solicitação. Por favor, tente novamente..
         /// </summary>
-        internal static string GeneralFail {
+        public static string GeneralFail {
             get {
                 return ResourceManager.GetString("GeneralFail", resourceCulture);
             }
@@ -99,7 +108,7 @@ namespace ApiLab.CrossCutting.Resources {
         /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Ocorreu uma falha na validação do payload de entrada..
         /// </summary>
-        internal static string GeneralFailValidation {
+        public static string GeneralFailValidation {
             get {
                 return ResourceManager.GetString("GeneralFailValidation", resourceCulture);
             }
@@ -108,7 +117,7 @@ namespace ApiLab.CrossCutting.Resources {
         /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Erro na execução do serviço..
         /// </summary>
-        internal static string ServiceExecutionError {
+        public static string ServiceExecutionError {
             get {
                 return ResourceManager.GetString("ServiceExecutionError", resourceCulture);
             }
@@ -117,7 +126,7 @@ namespace ApiLab.CrossCutting.Resources {
         /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Campo não encontrado..
         /// </summary>
-        internal static string ValidatorNotFound {
+        public static string ValidatorNotFound {
             get {
                 return ResourceManager.GetString("ValidatorNotFound", resourceCulture);
             }

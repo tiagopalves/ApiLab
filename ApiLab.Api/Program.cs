@@ -1,5 +1,7 @@
 using ApiLab.Api.Common.IoC;
+using ApiLab.CrossCutting.Configurations;
 using ApiLab.CrossCutting.LogManager.Extensions;
+using ApiLab.CrossCutting.Resources;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Scalar.AspNetCore;
@@ -9,11 +11,21 @@ try
 {
     var builder = WebApplication.CreateBuilder(args);
 
+    //Configurações
+    builder.Services.Configure<CommonConfiguration>(builder.Configuration.GetSection(nameof(CommonConfiguration)));
+    builder.Services.Configure<HealthChecksConfiguration>(builder.Configuration.GetSection(nameof(HealthChecksConfiguration)));
+    builder.Services.Configure<RedisConfiguration>(builder.Configuration.GetSection(nameof(RedisConfiguration)));
+
+    var commonConfiguration = builder.Configuration.GetRequiredSection(nameof(CommonConfiguration)).Get<CommonConfiguration>();
+    var healthChecksConfiguration = builder.Configuration.GetRequiredSection(nameof(HealthChecksConfiguration)).Get<HealthChecksConfiguration>();
+    var redisConfiguration = builder.Configuration.GetRequiredSection(nameof(RedisConfiguration)).Get<RedisConfiguration>();
+
     //Configuração do Serilog
     Log.Logger = new LoggerConfiguration()
         .ReadFrom.Configuration(builder.Configuration)
         .CreateLogger();
-    Log.Information("Iniciando a aplicação...");
+
+    Log.Information(FriendlyMessages.AppStarting);
 
     builder.Host.UseSerilog();
 
@@ -21,18 +33,21 @@ try
     builder.Services.AddOpenApi();
     //builder.Services.AddSwaggerGen(); //Forma antiga de usar o swagger
 
-    builder.Services.AddHealthChecks();
-        //.AddRedis(""); //TODO: Configurar Redis
+    builder.Services.AddHealthChecks()
+        .AddRedis(redisConfiguration?.ConnectionString ?? string.Empty, redisConfiguration?.HealthCheckName);
+
     builder.Services.AddHealthChecksUI(options =>
         {
-            options.SetEvaluationTimeInSeconds(30);
-            options.MaximumHistoryEntriesPerEndpoint(10);
-            options.AddHealthCheckEndpoint("Api Lab", "/health");
+            if (healthChecksConfiguration is not null && commonConfiguration is not null)
+            {
+                options.SetEvaluationTimeInSeconds(healthChecksConfiguration.EvaluationTimeInSeconds);
+                options.MaximumHistoryEntriesPerEndpoint(healthChecksConfiguration.MaximumHistoryEntriesPerEndpoint);
+                options.AddHealthCheckEndpoint(commonConfiguration.AppName, healthChecksConfiguration.HealthCheckEndpointUri);
+            }
         })
         .AddInMemoryStorage();
-    
 
-    //Meus serviços
+    //Meus Serviços
     builder.Services.AddLoggingService();
     builder.Services.AddServices();
 
@@ -56,7 +71,7 @@ try
         app.MapScalarApiReference(options =>
         {
             options
-                .WithTitle("Lab Api")
+                .WithTitle(commonConfiguration?.AppName ?? string.Empty)
                 .WithTheme(ScalarTheme.BluePlanet)
                 .WithDefaultHttpClient(ScalarTarget.CSharp, ScalarClient.HttpClient);
         });
@@ -64,7 +79,7 @@ try
 
     app.UseHttpsRedirection();
     app.UseAuthorization();
-    app.UseHealthChecks("/health", new HealthCheckOptions
+    app.UseHealthChecks(healthChecksConfiguration?.HealthCheckEndpointUri, new HealthCheckOptions
     {
         Predicate = _ => true,
         ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
@@ -75,10 +90,10 @@ try
 }
 catch (Exception ex)
 {
-    Log.Fatal(ex, "Ocorreu um erro ao iniciar a aplicação!");
+    Log.Fatal(ex, FriendlyMessages.AppStartingError);
 }
 finally
 {
-    Log.Information("Encerrando a aplicação...");
+    Log.Information(FriendlyMessages.AppEnding);
     Log.CloseAndFlush();
 };

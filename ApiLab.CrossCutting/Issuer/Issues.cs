@@ -2,7 +2,7 @@
 {
     public enum Issues
     {
-        None,
+        None_000,
 
         GeneralError_500, //ExceptionMiddleware
         GeneralError_501, //ApiServicesExtensions

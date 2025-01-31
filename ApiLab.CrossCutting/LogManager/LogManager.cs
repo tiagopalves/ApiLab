@@ -30,7 +30,7 @@ namespace ApiLab.CrossCutting.LogManager
         }
 
         [ExcludeFromCodeCoverage]
-        private void LogServiceWrite(LoggingLevel level, string message, string correlationId = "", string flowId = "", object? informationData = null, Issues issue = Issues.None, Exception? ex = null)
+        private void LogServiceWrite(LoggingLevel level, string message, string correlationId = "", string flowId = "", object? informationData = null, Issues issue = Issues.None_000, Exception? ex = null)
         {
             try
             {

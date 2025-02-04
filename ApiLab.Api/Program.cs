@@ -1,9 +1,11 @@
 using ApiLab.Api.Common.IoC;
+using ApiLab.CrossCutting.Common;
 using ApiLab.CrossCutting.Configurations;
 using ApiLab.CrossCutting.LogManager.Extensions;
 using ApiLab.CrossCutting.Resources;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.Http.Features;
 using Scalar.AspNetCore;
 using Serilog;
 
@@ -11,7 +13,8 @@ try
 {
     var builder = WebApplication.CreateBuilder(args);
 
-    //Configurações
+    #region AppSettings Configuration
+
     builder.Services.Configure<CommonConfiguration>(builder.Configuration.GetSection(nameof(CommonConfiguration)));
     builder.Services.Configure<HealthChecksConfiguration>(builder.Configuration.GetSection(nameof(HealthChecksConfiguration)));
     builder.Services.Configure<RedisConfiguration>(builder.Configuration.GetSection(nameof(RedisConfiguration)));
@@ -20,7 +23,11 @@ try
     var healthChecksConfiguration = builder.Configuration.GetRequiredSection(nameof(HealthChecksConfiguration)).Get<HealthChecksConfiguration>();
     var redisConfiguration = builder.Configuration.GetRequiredSection(nameof(RedisConfiguration)).Get<RedisConfiguration>();
 
-    //Configuração do Serilog
+    #endregion
+
+    #region Services Configuration
+
+    //Serilog
     Log.Logger = new LoggerConfiguration()
         .ReadFrom.Configuration(builder.Configuration)
         .CreateLogger();
@@ -33,9 +40,9 @@ try
     builder.Services.AddOpenApi();
     //builder.Services.AddSwaggerGen(); //Forma antiga de usar o swagger
 
+    //HealthChecks
     builder.Services.AddHealthChecks()
         .AddRedis(redisConfiguration?.ConnectionString ?? string.Empty, redisConfiguration?.HealthCheckName);
-
     builder.Services.AddHealthChecksUI(options =>
         {
             if (healthChecksConfiguration is not null && commonConfiguration is not null)
@@ -47,9 +54,28 @@ try
         })
         .AddInMemoryStorage();
 
+    //ProblemDetails
+    builder.Services.AddProblemDetails(options =>
+    {
+        options.CustomizeProblemDetails = context =>
+        {
+            var activity = context.HttpContext.Features.Get<IHttpActivityFeature>()?.Activity;
+
+            context.ProblemDetails.Instance = $"{context.HttpContext.Request.Method} {context.HttpContext.Request.Path}";
+            context.ProblemDetails.Extensions.TryAdd("requestId", context.HttpContext.TraceIdentifier);
+            context.ProblemDetails.Extensions.TryAdd("traceId", activity?.Id);
+        };
+    });
+
+    builder.Services.AddExceptionHandler<GeneralExceptionHandler>();
+
     //Meus Serviços
     builder.Services.AddLoggingService();
-    builder.Services.AddServices();
+    builder.Services.AddServices(); 
+
+    #endregion
+
+    #region App Configuration
 
     var app = builder.Build();
 
@@ -85,8 +111,12 @@ try
         ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
     });
     app.UseHealthChecksUI();
+    app.UseExceptionHandler();
+
     app.MapControllers();
     app.Run();
+
+    #endregion
 }
 catch (Exception ex)
 {

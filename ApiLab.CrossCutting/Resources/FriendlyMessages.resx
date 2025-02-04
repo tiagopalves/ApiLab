@@ -141,4 +141,7 @@
   <data name="AppEnding" xml:space="preserve">
     <value>Encerrando a aplicação...</value>
   </data>
+  <data name="ProblemDetailsBadRequest" xml:space="preserve">
+    <value>Bad Request</value>
+  </data>
 </root>

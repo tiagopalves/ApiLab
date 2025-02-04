@@ -115,6 +115,15 @@ namespace ApiLab.CrossCutting.Resources {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Bad Request.
+        /// </summary>
+        public static string ProblemDetailsBadRequest {
+            get {
+                return ResourceManager.GetString("ProblemDetailsBadRequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Erro na execução do serviço..
         /// </summary>
         public static string ServiceExecutionError {

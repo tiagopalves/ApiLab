@@ -9,7 +9,7 @@ namespace ApiLab.Api.Common.IoC
     {
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
-            services.AddTransient<ILabService, LabService>();
+            services.AddSingleton<ILabService, LabService>();
 
             return services;
         }

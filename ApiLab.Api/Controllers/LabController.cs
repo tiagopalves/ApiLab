@@ -1,6 +1,7 @@
 using Apilab.Application.AppServices.Interfaces;
 using ApiLab.CrossCutting.LogManager.Interfaces;
 using ApiLab.Domain.Entities;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ApiLab.Api.Controllers
@@ -18,8 +19,13 @@ namespace ApiLab.Api.Controllers
         ];
 
         [HttpGet]
-        public IEnumerable<WeatherForecast> GetWeatherForecast()
+        [ProducesResponseType(typeof(WeatherForecast[]), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public Results<Ok<WeatherForecast[]>, BadRequest> GetWeatherForecast()
         {
+            //TODO: Criar camada de validação
+            //TODO: Mover implementação para a LabService
+
             _logManager.AddInformation($"Início do método {nameof(GetWeatherForecast)}");
 
             var retorno = Enumerable.Range(1, 5).Select(index => new WeatherForecast
@@ -31,8 +37,8 @@ namespace ApiLab.Api.Controllers
             .ToArray();
             
             _logManager.AddInformation($"Fim do método {nameof(GetWeatherForecast)}");
-
-            return retorno;
+            
+            return TypedResults.Ok(retorno);
         }
     }
 }

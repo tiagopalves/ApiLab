@@ -97,7 +97,7 @@ namespace ApiLab.CrossCutting.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Ocorreu uma falha na sua solicitação. Por favor, tente novamente..
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Ocorreu uma falha desconhecida na sua solicitação..
         /// </summary>
         public static string GeneralFail {
             get {

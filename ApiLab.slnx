@@ -1,21 +1,24 @@
 <Solution>
+  <Folder Name="/.solution-items/" Id="5fd8cfe2-de80-4913-9d6e-6103633e7c22">
+    <File Path="README.md" />
+  </Folder>
   <Folder Name="/src/" />
-  <Folder Name="/src/01 - API/">
+  <Folder Name="/src/01 - API/" Id="af78972b-a02d-6354-747a-fc0265424a11">
     <Project Path="ApiLab.Api/ApiLab.Api.csproj" />
   </Folder>
-  <Folder Name="/src/02 - Application/">
+  <Folder Name="/src/02 - Application/" Id="0f2c697c-d451-ea30-b540-eacf5c9bdf7e">
     <Project Path="Apilab.Application/Apilab.Application.csproj" />
   </Folder>
-  <Folder Name="/src/03 - CrossCutting/">
+  <Folder Name="/src/03 - CrossCutting/" Id="eed4eeaa-36c7-b1c8-9324-438be41a1e3a">
     <Project Path="ApiLab.CrossCutting/ApiLab.CrossCutting.csproj" />
   </Folder>
-  <Folder Name="/src/04 - Domain/">
+  <Folder Name="/src/04 - Domain/" Id="5c430d58-9435-68c4-03f5-eb52b8659487">
     <Project Path="ApiLab.Domain/ApiLab.Domain.csproj" />
   </Folder>
-  <Folder Name="/src/05 - Infra/">
+  <Folder Name="/src/05 - Infra/" Id="a2bf437b-b247-4807-54f3-62b716f7a38d">
     <Project Path="ApiLab.Infra/ApiLab.Infra.csproj" />
   </Folder>
-  <Folder Name="/src/06 - Tests/">
+  <Folder Name="/src/06 - Tests/" Id="5fac56d0-d189-e26b-4406-08abd6661e59">
     <Project Path="ApiLab.UnitTests/ApiLab.UnitTests.csproj" />
   </Folder>
 </Solution>

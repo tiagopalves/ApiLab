@@ -1,25 +1,27 @@
-﻿using ApiLab.CrossCutting.Resources;
+﻿using ApiLab.CrossCutting.Issuer;
+using ApiLab.CrossCutting.LogManager.Interfaces;
+using ApiLab.CrossCutting.Resources;
 using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ApiLab.CrossCutting.Common
+namespace ApiLab.Api.Common.ExceptionHandlers
 {
-    public class GeneralExceptionHandler(IProblemDetailsService problemDetailsService) : IExceptionHandler
+    public class GeneralExceptionHandler(IProblemDetailsService problemDetailsService, ILogManager logManager) : IExceptionHandler
     {
         private readonly IProblemDetailsService _problemDetailsService = problemDetailsService;
+        private readonly ILogManager _logManager = logManager;
 
         public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
         {
+            _logManager.AddError(Issues.GeneralError_500, FriendlyMessages.GeneralFail, exception);
+
             var problemDetails = new ProblemDetails
             {
-                Status = StatusCodes.Status400BadRequest,
-                Title = exception.Message,
-                Detail = exception.StackTrace?.Replace("\n", "").Replace("\t", "").Replace("\r", "").Trim(),
+                Status = httpContext.Response.StatusCode,
+                Title = FriendlyMessages.GeneralFail,
+                Detail = exception.Message,
                 Type = FriendlyMessages.ProblemDetailsBadRequest
             };
-
-            httpContext.Response.StatusCode = problemDetails.Status.Value;
 
             return await _problemDetailsService.TryWriteAsync(
                 new ProblemDetailsContext

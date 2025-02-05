@@ -127,7 +127,7 @@
     <value>Inicializando a aplicação...</value>
   </data>
   <data name="GeneralFail" xml:space="preserve">
-    <value>Ocorreu uma falha na sua solicitação. Por favor, tente novamente.</value>
+    <value>Ocorreu uma falha desconhecida na sua solicitação.</value>
   </data>
   <data name="GeneralFailValidation" xml:space="preserve">
     <value>Ocorreu uma falha na validação do payload de entrada.</value>

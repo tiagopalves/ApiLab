@@ -1,5 +1,4 @@
 using ApiLab.Api.Common.IoC;
-using ApiLab.CrossCutting.Common;
 using ApiLab.CrossCutting.Configurations;
 using ApiLab.CrossCutting.LogManager.Extensions;
 using ApiLab.CrossCutting.Resources;
@@ -8,6 +7,7 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Http.Features;
 using Scalar.AspNetCore;
 using Serilog;
+using ApiLab.Api.Common.ExceptionHandlers;
 
 try
 {

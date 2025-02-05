@@ -1,7 +1,9 @@
 using Apilab.Application.AppServices.Interfaces;
+using Apilab.Application.Validators;
 using ApiLab.CrossCutting.LogManager.Interfaces;
 using ApiLab.CrossCutting.Resources;
 using ApiLab.Domain.Entities;
+using FluentValidation;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,10 +11,11 @@ namespace ApiLab.Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class LabController(ILogManager logManager, ILabService labService) : ControllerBase
+    public class LabController(ILogManager logManager, ILabService labService, IValidator<Cliente> _clienteValidator) : ControllerBase
     {
         private readonly ILogManager _logManager = logManager;
         private readonly ILabService _labService = labService;
+        private readonly IValidator<Cliente> _clienteValidator = _clienteValidator;
 
         private static readonly string[] Summaries =
         [
@@ -24,13 +27,18 @@ namespace ApiLab.Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public Results<Ok<WeatherForecast[]>, BadRequest<ProblemDetails>> GetWeatherForecast()
         {
-            //TODO: Criar camada de validação
-            //TODO: Mover implementação para a LabService
+            //TODO: Mover implementação para a LabService e alterar entrada do método para receber um cliente
 
             try
             {
                 _logManager.AddInformation($"Início do método {nameof(GetWeatherForecast)}");
 
+                var validationResult = _clienteValidator.Validate(new Cliente() { Id = Guid.CreateVersion7(), Nome = "", Email = "" });
+                if (!validationResult.IsValid)
+                {
+                    _logManager.AddInformation(string.Join(" ", validationResult.Errors));
+                }
+                
                 var retorno = Enumerable.Range(1, 5).Select(index => new WeatherForecast
                 {
                     Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),

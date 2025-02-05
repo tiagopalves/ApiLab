@@ -135,13 +135,16 @@
   <data name="ServiceExecutionError" xml:space="preserve">
     <value>Erro na execução do serviço.</value>
   </data>
-  <data name="ValidatorNotFound" xml:space="preserve">
-    <value>Campo não encontrado.</value>
+  <data name="ValidatorInvalid" xml:space="preserve">
+    <value>não é válido!</value>
   </data>
   <data name="AppEnding" xml:space="preserve">
     <value>Encerrando a aplicação...</value>
   </data>
   <data name="ProblemDetailsBadRequest" xml:space="preserve">
     <value>Bad Request</value>
+  </data>
+  <data name="ValidatorRequired" xml:space="preserve">
+    <value>é obrigatório!</value>
   </data>
 </root>

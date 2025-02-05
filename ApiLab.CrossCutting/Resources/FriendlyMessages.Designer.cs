@@ -133,11 +133,20 @@ namespace ApiLab.CrossCutting.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Campo não encontrado..
+        ///   Consulta uma cadeia de caracteres localizada semelhante a não é válido!.
         /// </summary>
-        public static string ValidatorNotFound {
+        public static string ValidatorInvalid {
             get {
-                return ResourceManager.GetString("ValidatorNotFound", resourceCulture);
+                return ResourceManager.GetString("ValidatorInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a é obrigatório!.
+        /// </summary>
+        public static string ValidatorRequired {
+            get {
+                return ResourceManager.GetString("ValidatorRequired", resourceCulture);
             }
         }
     }

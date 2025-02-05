@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ApiLab.CrossCutting\ApiLab.CrossCutting.csproj" />
+  </ItemGroup>
+
 </Project>

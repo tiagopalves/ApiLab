@@ -8,6 +8,9 @@ using Microsoft.AspNetCore.Http.Features;
 using Scalar.AspNetCore;
 using Serilog;
 using ApiLab.Api.Common.ExceptionHandlers;
+using FluentValidation.AspNetCore;
+using FluentValidation;
+using Apilab.Application.Validators;
 
 try
 {
@@ -68,6 +71,8 @@ try
     });
 
     builder.Services.AddExceptionHandler<GeneralExceptionHandler>();
+    
+    builder.Services.AddValidatorsFromAssemblyContaining<ClienteValidator>();
 
     //Meus Serviços
     builder.Services.AddLoggingService();

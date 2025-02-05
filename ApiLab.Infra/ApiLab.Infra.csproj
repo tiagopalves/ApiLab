@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ApiLab.Domain\ApiLab.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

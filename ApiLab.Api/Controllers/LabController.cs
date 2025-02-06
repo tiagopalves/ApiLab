@@ -4,6 +4,7 @@ using ApiLab.CrossCutting.LogManager.Interfaces;
 using ApiLab.CrossCutting.Resources;
 using ApiLab.Domain.Entities;
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,8 +24,10 @@ namespace ApiLab.Api.Controllers
         ];
 
         [HttpGet]
+        [Authorize]
         [ProducesResponseType(typeof(WeatherForecast[]), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public Results<Ok<WeatherForecast[]>, BadRequest<ProblemDetails>> GetWeatherForecast()
         {
             //TODO: Mover implementação para a LabService e alterar entrada do método para receber um cliente

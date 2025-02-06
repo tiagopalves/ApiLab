@@ -1,16 +1,18 @@
+using Apilab.Application.Validators;
+using ApiLab.Api.Common.ExceptionHandlers;
 using ApiLab.Api.Common.IoC;
 using ApiLab.CrossCutting.Configurations;
 using ApiLab.CrossCutting.LogManager.Extensions;
 using ApiLab.CrossCutting.Resources;
+using FluentValidation;
 using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
 using Serilog;
-using ApiLab.Api.Common.ExceptionHandlers;
-using FluentValidation.AspNetCore;
-using FluentValidation;
-using Apilab.Application.Validators;
+using System.Text;
 
 try
 {
@@ -43,6 +45,22 @@ try
     builder.Services.AddOpenApi();
     //builder.Services.AddSwaggerGen(); //Forma antiga de usar o swagger
 
+    //JwtBearer Authentication
+    if (commonConfiguration is not null && !string.IsNullOrEmpty(commonConfiguration.ApiSecurityKey))
+    {
+        builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(o =>
+            {
+                o.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(commonConfiguration.ApiSecurityKey))
+                };
+            });
+        builder.Services.AddAuthorization();
+    }
+
     //HealthChecks
     builder.Services.AddHealthChecks()
         .AddRedis(redisConfiguration?.ConnectionString ?? string.Empty, redisConfiguration?.HealthCheckName);
@@ -71,12 +89,12 @@ try
     });
 
     builder.Services.AddExceptionHandler<GeneralExceptionHandler>();
-    
+
     builder.Services.AddValidatorsFromAssemblyContaining<ClienteValidator>();
 
     //Meus Serviços
     builder.Services.AddLoggingService();
-    builder.Services.AddServices(); 
+    builder.Services.AddServices();
 
     #endregion
 
@@ -109,6 +127,7 @@ try
     }
 
     app.UseHttpsRedirection();
+    app.UseAuthentication();
     app.UseAuthorization();
     app.UseHealthChecks(healthChecksConfiguration?.HealthCheckEndpointUri, new HealthCheckOptions
     {

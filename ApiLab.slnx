@@ -1,5 +1,6 @@
 <Solution>
   <Folder Name="/.solution-items/" Id="5fd8cfe2-de80-4913-9d6e-6103633e7c22">
+    <File Path=".editorconfig" />
     <File Path="README.md" />
   </Folder>
   <Folder Name="/src/" />

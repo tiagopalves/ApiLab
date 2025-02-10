@@ -1,10 +1,7 @@
 using Apilab.Application.AppServices.Interfaces;
-using Apilab.Application.Validators;
 using ApiLab.CrossCutting.LogManager.Interfaces;
 using ApiLab.CrossCutting.Resources;
 using ApiLab.Domain.Entities;
-using FluentValidation;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,57 +9,66 @@ namespace ApiLab.Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class LabController(ILogManager logManager, ILabService labService, IValidator<Cliente> _clienteValidator) : ControllerBase
+    public class LabController(ILogManager logManager, IClienteService clienteService) : ControllerBase
     {
         private readonly ILogManager _logManager = logManager;
-        private readonly ILabService _labService = labService;
-        private readonly IValidator<Cliente> _clienteValidator = _clienteValidator;
+        private readonly IClienteService _clienteService = clienteService;
 
-        private static readonly string[] Summaries =
-        [
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        ];
+        //TODO: continuar implementaçao da cliente service e padronizar nomes, rotas, etc.
 
-        [HttpGet]
-        [Authorize]
-        [ProducesResponseType(typeof(WeatherForecast[]), StatusCodes.Status200OK)]
+        [HttpPost]
+        //[Authorize]
+        [ProducesResponseType(typeof(Cliente), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public Results<Ok<WeatherForecast[]>, BadRequest<ProblemDetails>> GetWeatherForecast()
+        public async Task<Results<Ok<Cliente>, BadRequest<ProblemDetails>>> CreateAsync([FromBody]Cliente cliente)
         {
-            //TODO: Mover implementação para a LabService e alterar entrada do método para receber um cliente
-
             try
             {
-                _logManager.AddInformation($"Início do método {nameof(GetWeatherForecast)}");
+                await _clienteService.CreateAsync(cliente);
 
-                var validationResult = _clienteValidator.Validate(new Cliente() { Id = Guid.CreateVersion7(), Nome = "", Email = "" });
-                if (!validationResult.IsValid)
-                {
-                    _logManager.AddInformation(string.Join(" ", validationResult.Errors));
-                }
-                
-                var retorno = Enumerable.Range(1, 5).Select(index => new WeatherForecast
-                {
-                    Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                    TemperatureC = Random.Shared.Next(-20, 55),
-                    Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-                })
-                .ToArray();
-
-                _logManager.AddInformation($"Fim do método {nameof(GetWeatherForecast)}");
-
-                return TypedResults.Ok(retorno);
+                return TypedResults.Ok(cliente);
             }
             catch (Exception ex)
             {
-                _logManager.AddError(CrossCutting.Issuer.Issues.ControllerError_4001, $"Erro na chamada do endpoint {nameof(GetWeatherForecast)}!", ex);
+                _logManager.AddError(CrossCutting.Issuer.Issues.ControllerError_4001, $"Erro na chamada do endpoint {nameof(CreateAsync)}!", ex);
 
                 //TODO: Centralizar tratamento de erros
                 return TypedResults.BadRequest(new ProblemDetails
                 {
                     Title = "Erro!",
-                    Detail = $"Erro na chamada do endpoint {nameof(GetWeatherForecast)}!",
+                    Detail = $"Erro na chamada do endpoint {nameof(CreateAsync)}!",
+                    Type = FriendlyMessages.ProblemDetailsBadRequest
+                });
+            }
+        }
+
+        [HttpGet]
+        //[Authorize]
+        [ProducesResponseType(typeof(WeatherForecast[]), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<Results<Ok<List<Cliente>>, BadRequest<ProblemDetails>>> GetAllAsync()
+        {
+            try
+            {
+                _logManager.AddInformation($"Início do método {nameof(GetAllAsync)}");
+
+                var retorno = await _clienteService.GetAllAsync();
+
+                _logManager.AddInformation($"Fim do método {nameof(GetAllAsync)}");
+
+                return TypedResults.Ok(retorno);
+            }
+            catch (Exception ex)
+            {
+                _logManager.AddError(CrossCutting.Issuer.Issues.ControllerError_4002, $"Erro na chamada do endpoint {nameof(GetAllAsync)}!", ex);
+
+                //TODO: Centralizar tratamento de erros
+                return TypedResults.BadRequest(new ProblemDetails
+                {
+                    Title = "Erro!",
+                    Detail = $"Erro na chamada do endpoint {nameof(GetAllAsync)}!",
                     Type = FriendlyMessages.ProblemDetailsBadRequest
                 });
             }

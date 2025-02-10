@@ -1,9 +1,11 @@
+using Apilab.Application.Extensions;
 using Apilab.Application.Validators;
 using ApiLab.Api.Common.ExceptionHandlers;
-using ApiLab.Api.Common.IoC;
+using ApiLab.CrossCutting.Common.Constants;
 using ApiLab.CrossCutting.Configurations;
 using ApiLab.CrossCutting.LogManager.Extensions;
 using ApiLab.CrossCutting.Resources;
+using ApiLab.Infra.Extensions;
 using FluentValidation;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -49,12 +51,14 @@ try
     if (commonConfiguration is not null && !string.IsNullOrEmpty(commonConfiguration.ApiSecurityKey))
     {
         builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(o =>
+            .AddJwtBearer(options =>
             {
-                o.TokenValidationParameters = new TokenValidationParameters
+                options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = false,
                     ValidateAudience = false,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(commonConfiguration.ApiSecurityKey))
                 };
             });
@@ -83,8 +87,8 @@ try
             var activity = context.HttpContext.Features.Get<IHttpActivityFeature>()?.Activity;
 
             context.ProblemDetails.Instance = $"{context.HttpContext.Request.Method} {context.HttpContext.Request.Path}";
-            context.ProblemDetails.Extensions.TryAdd("requestId", context.HttpContext.TraceIdentifier);
-            context.ProblemDetails.Extensions.TryAdd("traceId", activity?.Id);
+            context.ProblemDetails.Extensions.TryAdd(Constants.REQUEST_ID_PROBLEM_KEY, context.HttpContext.TraceIdentifier);
+            context.ProblemDetails.Extensions.TryAdd(Constants.REQUEST_ID_PROBLEM_KEY, activity?.Id);
         };
     });
 
@@ -95,6 +99,8 @@ try
     //Meus Serviços
     builder.Services.AddLoggingService();
     builder.Services.AddServices();
+    builder.Services.AddRedisConnection(redisConfiguration);
+    builder.Services.AddRepositories();
 
     #endregion
 
@@ -129,13 +135,13 @@ try
     app.UseHttpsRedirection();
     app.UseAuthentication();
     app.UseAuthorization();
+    app.UseExceptionHandler();
     app.UseHealthChecks(healthChecksConfiguration?.HealthCheckEndpointUri, new HealthCheckOptions
     {
         Predicate = _ => true,
         ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
     });
     app.UseHealthChecksUI();
-    app.UseExceptionHandler();
 
     app.MapControllers();
     app.Run();

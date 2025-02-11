@@ -129,11 +129,11 @@
   <data name="GeneralFail" xml:space="preserve">
     <value>Ocorreu uma falha desconhecida na sua solicitação.</value>
   </data>
-  <data name="GeneralFailValidation" xml:space="preserve">
-    <value>Ocorreu uma falha na validação do payload de entrada.</value>
+  <data name="ErrorTitle" xml:space="preserve">
+    <value>Erro!</value>
   </data>
-  <data name="ServiceExecutionError" xml:space="preserve">
-    <value>Erro na execução do serviço.</value>
+  <data name="ErrorEndpoint" xml:space="preserve">
+    <value>Erro na chamada do endpoint</value>
   </data>
   <data name="ValidatorInvalid" xml:space="preserve">
     <value>não é válido!</value>
@@ -146,5 +146,8 @@
   </data>
   <data name="ValidatorRequired" xml:space="preserve">
     <value>é obrigatório!</value>
+  </data>
+  <data name="ErrorTitlePayload" xml:space="preserve">
+    <value>Erro no payload de entrada!</value>
   </data>
 </root>

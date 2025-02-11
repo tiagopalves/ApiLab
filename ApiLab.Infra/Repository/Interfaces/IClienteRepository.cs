@@ -4,7 +4,7 @@ namespace ApiLab.Infra.Repository.Interfaces
 {
     public interface IClienteRepository
     {
-        Task<bool> CreateAsync(Cliente cliente);
+        Task<Guid> CreateAsync(Cliente cliente);
         
         Task<Cliente?> GetByIdAsync(Guid id);
 

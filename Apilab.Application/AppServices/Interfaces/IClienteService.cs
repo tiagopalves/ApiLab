@@ -4,7 +4,7 @@ namespace Apilab.Application.AppServices.Interfaces
 {
     public interface IClienteService
     {
-        Task<bool> CreateAsync(Cliente cliente);
+        Task<string> CreateAsync(Cliente cliente);
 
         Task<Cliente?> GetByIdAsync(Guid id);
 
@@ -12,7 +12,7 @@ namespace Apilab.Application.AppServices.Interfaces
         
         Task<List<Cliente>> GetAllAsync();
 
-        Task<bool> UpdateAsync(Cliente cliente);
+        Task<string?> UpdateAsync(Cliente cliente);
 
         Task<bool> DeleteAsync(Guid id);
     }

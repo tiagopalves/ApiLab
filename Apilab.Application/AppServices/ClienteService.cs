@@ -1,4 +1,5 @@
 ﻿using Apilab.Application.AppServices.Interfaces;
+using ApiLab.CrossCutting.Issuer;
 using ApiLab.CrossCutting.LogManager.Interfaces;
 using ApiLab.Domain.Entities;
 using ApiLab.Infra.Repository.Interfaces;
@@ -12,25 +13,33 @@ namespace Apilab.Application.AppServices
         private readonly IClienteRepository _clienteRepository = clienteRepository;
         private readonly IValidator<Cliente> _clienteValidator = clienteValidator;
 
-        public async Task<bool> CreateAsync(Cliente cliente)
+        //TODO: Padronizar e alterar retorno da camada de serviço
+
+        public async Task<string> CreateAsync(Cliente cliente)
         {
             var validationResult = await _clienteValidator.ValidateAsync(cliente);
             if (!validationResult.IsValid)
             {
-                _logManager.AddInformation(string.Join(" ", validationResult.Errors));
+                var erros = string.Join(" ", validationResult.Errors);
+
+                _logManager.AddWarning(Issues.AppServiceError_2001, erros);
+
+                return await Task.FromResult(erros);
             }
 
-            return await _clienteRepository.CreateAsync(cliente);
+            var retorno = await _clienteRepository.CreateAsync(cliente);
+
+            return retorno.ToString();
         }
 
-        public Task<Cliente?> GetByIdAsync(Guid id)
+        public async Task<Cliente?> GetByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            return await _clienteRepository.GetByIdAsync(id);
         }
 
-        public Task<Cliente?> GetByEmailAsync(string email)
+        public async Task<Cliente?> GetByEmailAsync(string email)
         {
-            throw new NotImplementedException();
+            return await _clienteRepository.GetByEmailAsync(email);
         }
 
         public async Task<List<Cliente>> GetAllAsync()
@@ -38,14 +47,29 @@ namespace Apilab.Application.AppServices
             return await _clienteRepository.GetAllAsync();
         }
 
-        public Task<bool> UpdateAsync(Cliente cliente)
+        public async Task<string?> UpdateAsync(Cliente cliente)
         {
-            throw new NotImplementedException();
+            //TODO: Criar validator pro Update
+            var validationResult = await _clienteValidator.ValidateAsync(cliente);
+            if (!validationResult.IsValid)
+            {
+                var erros = string.Join(" ", validationResult.Errors);
+
+                _logManager.AddWarning(Issues.AppServiceError_2002, erros);
+
+                return await Task.FromResult(erros);
+            }
+
+            var isUpdated = await _clienteRepository.UpdateAsync(cliente);
+            if (isUpdated)
+                return string.Empty;
+            else
+                return null;
         }
-        
-        public Task<bool> DeleteAsync(Guid id)
+
+        public async Task<bool> DeleteAsync(Guid id)
         {
-            throw new NotImplementedException();
+            return await _clienteRepository.DeleteAsync(id);
         }
     }
 }

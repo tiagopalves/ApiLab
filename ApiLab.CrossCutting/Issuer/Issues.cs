@@ -4,22 +4,23 @@
     {
         None_000,
 
-        GeneralError_500, //ExceptionMiddleware
-        GeneralError_501, //ApiServicesExtensions
+        GeneralError_500, //ExceptionHandler
 
         LogManagerError_5001, //LogManager
 
         FilterError_0001, //ApiKeyValidationFilter
         FilterError_0002, //ApiKeyValidationFilter
 
-        IServiceCollectionError_1001, //HealthCheck
+        ControllerError_4001, //ClientesController
+        ControllerError_4002, //ClientesController
+        ControllerError_4003, //ClientesController
+        ControllerError_4004, //ClientesController
+        ControllerError_4005, //ClientesController
+        ControllerError_4006, //ClientesController
 
-        AppServiceError_2001, //GoogleAnalyticsAppService
-        AppServiceError_2002, //GoogleAnalyticsAppService
+        ControllerWarning_4101, //ClientesController
 
-        ControllerError_4001, //GoogleAnalyticsController
-        ControllerError_4002, //GoogleAnalyticsController
-        ControllerWarning_4101, //GoogleAnalyticsController
-        ControllerWarning_4102, //GoogleAnalyticsBatchController
+        AppServiceError_2001, //ClientesService
+        AppServiceError_2002, //ClientesService
     }
 }

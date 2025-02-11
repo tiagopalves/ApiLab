@@ -10,7 +10,7 @@ namespace ApiLab.Infra.Repository
     {
         private readonly IDatabase _db = redis.GetDatabase();
 
-        public async Task<bool> CreateAsync(Cliente cliente)
+        public async Task<Guid> CreateAsync(Cliente cliente)
         {
             if (cliente.Id == Guid.Empty)
                 cliente.Id = Guid.CreateVersion7();
@@ -27,9 +27,11 @@ namespace ApiLab.Infra.Repository
 
                 // Cria um índice pelo email para busca
                 await _db.StringSetAsync($"{Constants.REDIS_CLIENTE_KEY_PREFIX}email:{cliente.Email}", cliente.Id.ToString());
+
+                return cliente.Id;
             }
 
-            return saved;
+            return Guid.Empty;
         }
 
         public async Task<Cliente?> GetByIdAsync(Guid id)

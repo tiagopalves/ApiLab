@@ -97,6 +97,33 @@ namespace ApiLab.CrossCutting.Resources {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Erro na chamada do endpoint.
+        /// </summary>
+        public static string ErrorEndpoint {
+            get {
+                return ResourceManager.GetString("ErrorEndpoint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Erro!.
+        /// </summary>
+        public static string ErrorTitle {
+            get {
+                return ResourceManager.GetString("ErrorTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Erro no payload de entrada!.
+        /// </summary>
+        public static string ErrorTitlePayload {
+            get {
+                return ResourceManager.GetString("ErrorTitlePayload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Ocorreu uma falha desconhecida na sua solicitação..
         /// </summary>
         public static string GeneralFail {
@@ -106,29 +133,11 @@ namespace ApiLab.CrossCutting.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Ocorreu uma falha na validação do payload de entrada..
-        /// </summary>
-        public static string GeneralFailValidation {
-            get {
-                return ResourceManager.GetString("GeneralFailValidation", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Bad Request.
         /// </summary>
         public static string ProblemDetailsBadRequest {
             get {
                 return ResourceManager.GetString("ProblemDetailsBadRequest", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Erro na execução do serviço..
-        /// </summary>
-        public static string ServiceExecutionError {
-            get {
-                return ResourceManager.GetString("ServiceExecutionError", resourceCulture);
             }
         }
         

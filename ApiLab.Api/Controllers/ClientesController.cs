@@ -1,4 +1,5 @@
 using Apilab.Application.AppServices.Interfaces;
+using Apilab.Application.Commands;
 using ApiLab.CrossCutting.LogManager.Interfaces;
 using ApiLab.CrossCutting.Resources;
 using ApiLab.Domain.Entities;
@@ -15,13 +16,13 @@ namespace ApiLab.Api.Controllers
         private readonly ILogManager _logManager = logManager;
         private readonly IClienteService _clienteService = clienteService;
 
-        //TODO: Criar commands, padronizar retornos, ajustar autorização, etc.
+        //TODO: Criar padronizar retornos, ajustar autorização, etc.
 
         [HttpPost]
-        [ProducesResponseType(typeof(Cliente), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ClienteCreateCommand), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<Results<Created<Guid>, BadRequest<ProblemDetails>>> CreateAsync([FromBody] Cliente cliente)
+        public async Task<Results<Created<Guid>, BadRequest<ProblemDetails>>> CreateAsync([FromBody] ClienteCreateCommand cliente)
         {
             try
             {
@@ -141,11 +142,11 @@ namespace ApiLab.Api.Controllers
         }
 
         [HttpPut]
-        [ProducesResponseType(typeof(Cliente), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ClienteUpdateCommand), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<Results<Ok<Cliente>, NotFound, BadRequest<ProblemDetails>>> UpdateAsync([FromBody] Cliente cliente)
+        public async Task<Results<Ok<ClienteUpdateCommand>, NotFound, BadRequest<ProblemDetails>>> UpdateAsync([FromBody] ClienteUpdateCommand cliente)
         {
             try
             {

@@ -1,12 +1,13 @@
-﻿using ApiLab.CrossCutting.Resources;
+﻿using Apilab.Application.Commands;
+using ApiLab.CrossCutting.Resources;
 using ApiLab.Domain.Entities;
 using FluentValidation;
 
 namespace Apilab.Application.Validators
 {
-    public class ClienteValidator : AbstractValidator<Cliente>
+    public class ClienteCreateValidator : AbstractValidator<ClienteCreateCommand>
     {
-        public ClienteValidator()
+        public ClienteCreateValidator()
         {
             RuleFor(x => x.Nome)
                 .NotEmpty()

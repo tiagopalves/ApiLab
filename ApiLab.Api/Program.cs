@@ -1,6 +1,7 @@
 using Apilab.Application.Extensions;
 using Apilab.Application.Validators;
 using ApiLab.Api.Common.ExceptionHandlers;
+using ApiLab.Api.Common.Filters;
 using ApiLab.CrossCutting.Common.Constants;
 using ApiLab.CrossCutting.Configurations;
 using ApiLab.CrossCutting.LogManager.Extensions;
@@ -43,7 +44,10 @@ try
 
     builder.Host.UseSerilog();
 
-    builder.Services.AddControllers();
+    builder.Services.AddControllers(options =>
+    {
+        options.Filters.Add<ApiKeyValidationFilter>();
+    });
     builder.Services.AddOpenApi();
     //builder.Services.AddSwaggerGen(); //Forma antiga de usar o swagger
 
@@ -94,7 +98,7 @@ try
 
     builder.Services.AddExceptionHandler<GeneralExceptionHandler>();
 
-    builder.Services.AddValidatorsFromAssemblyContaining<ClienteValidator>();
+    builder.Services.AddValidatorsFromAssemblyContaining<ClienteCreateValidator>();
 
     //Meus Serviços
     builder.Services.AddLoggingService();

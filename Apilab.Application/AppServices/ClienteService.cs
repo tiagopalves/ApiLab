@@ -1,4 +1,5 @@
 ﻿using Apilab.Application.AppServices.Interfaces;
+using Apilab.Application.Commands;
 using ApiLab.CrossCutting.Issuer;
 using ApiLab.CrossCutting.LogManager.Interfaces;
 using ApiLab.Domain.Entities;
@@ -7,17 +8,21 @@ using FluentValidation;
 
 namespace Apilab.Application.AppServices
 {
-    public class ClienteService(ILogManager logManager, IClienteRepository clienteRepository, IValidator<Cliente> clienteValidator) : IClienteService
+    public class ClienteService(ILogManager logManager, 
+        IClienteRepository clienteRepository, 
+        IValidator<ClienteCreateCommand> clienteCreateCommandValidator, 
+        IValidator<ClienteUpdateCommand> clienteUpdateCommandValidator) : IClienteService
     {
         private readonly ILogManager _logManager = logManager;
         private readonly IClienteRepository _clienteRepository = clienteRepository;
-        private readonly IValidator<Cliente> _clienteValidator = clienteValidator;
+        private readonly IValidator<ClienteCreateCommand> _clienteCreateCommandValidator = clienteCreateCommandValidator;
+        private readonly IValidator<ClienteUpdateCommand> _clienteUpdateCommandValidator = clienteUpdateCommandValidator;
 
         //TODO: Padronizar e alterar retorno da camada de serviço
 
-        public async Task<string> CreateAsync(Cliente cliente)
+        public async Task<string> CreateAsync(ClienteCreateCommand cliente)
         {
-            var validationResult = await _clienteValidator.ValidateAsync(cliente);
+            var validationResult = await _clienteCreateCommandValidator.ValidateAsync(cliente);
             if (!validationResult.IsValid)
             {
                 var erros = string.Join(" ", validationResult.Errors);
@@ -47,10 +52,9 @@ namespace Apilab.Application.AppServices
             return await _clienteRepository.GetAllAsync();
         }
 
-        public async Task<string?> UpdateAsync(Cliente cliente)
+        public async Task<string?> UpdateAsync(ClienteUpdateCommand cliente)
         {
-            //TODO: Criar validator pro Update
-            var validationResult = await _clienteValidator.ValidateAsync(cliente);
+            var validationResult = await _clienteUpdateCommandValidator.ValidateAsync(cliente);
             if (!validationResult.IsValid)
             {
                 var erros = string.Join(" ", validationResult.Errors);

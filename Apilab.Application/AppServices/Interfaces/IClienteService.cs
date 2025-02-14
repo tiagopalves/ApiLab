@@ -1,10 +1,11 @@
-﻿using ApiLab.Domain.Entities;
+﻿using Apilab.Application.Commands;
+using ApiLab.Domain.Entities;
 
 namespace Apilab.Application.AppServices.Interfaces
 {
     public interface IClienteService
     {
-        Task<string> CreateAsync(Cliente cliente);
+        Task<string> CreateAsync(ClienteCreateCommand cliente);
 
         Task<Cliente?> GetByIdAsync(Guid id);
 
@@ -12,7 +13,7 @@ namespace Apilab.Application.AppServices.Interfaces
         
         Task<List<Cliente>> GetAllAsync();
 
-        Task<string?> UpdateAsync(Cliente cliente);
+        Task<string?> UpdateAsync(ClienteUpdateCommand cliente);
 
         Task<bool> DeleteAsync(Guid id);
     }

@@ -2,6 +2,7 @@
 {
     public struct Constants
     {
+        public const string API_KEY_HEADER_KEY = "ApiKey";
         public const string CORRELATION_HEADER_KEY = "CorrelationId";
         public const string FLOW_ID_HEADER_KEY = "FlowId";
         public const string REQUEST_ID_PROBLEM_KEY = "requestId";

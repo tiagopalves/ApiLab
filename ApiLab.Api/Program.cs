@@ -23,6 +23,7 @@ try
 
     #region AppSettings Configuration
 
+    builder.Services.Configure<AccessConfiguration>(builder.Configuration.GetSection(nameof(AccessConfiguration)));
     builder.Services.Configure<CommonConfiguration>(builder.Configuration.GetSection(nameof(CommonConfiguration)));
     builder.Services.Configure<HealthChecksConfiguration>(builder.Configuration.GetSection(nameof(HealthChecksConfiguration)));
     builder.Services.Configure<RedisConfiguration>(builder.Configuration.GetSection(nameof(RedisConfiguration)));
@@ -98,7 +99,7 @@ try
 
     builder.Services.AddExceptionHandler<GeneralExceptionHandler>();
 
-    builder.Services.AddValidatorsFromAssemblyContaining<ClienteCreateValidator>();
+    builder.Services.AddValidatorsFromAssemblyContaining<ClienteCreateCommandValidator>();
 
     //Meus Serviços
     builder.Services.AddLoggingService();

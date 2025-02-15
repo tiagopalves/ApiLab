@@ -10,6 +10,7 @@
 
         FilterError_0001, //ApiKeyValidationFilter
         FilterError_0002, //ApiKeyValidationFilter
+        FilterError_0003, //ApiKeyValidationFilter
 
         ControllerError_4001, //ClientesController
         ControllerError_4002, //ClientesController
@@ -18,9 +19,7 @@
         ControllerError_4005, //ClientesController
         ControllerError_4006, //ClientesController
 
-        ControllerWarning_4101, //ClientesController
-
-        AppServiceError_2001, //ClientesService
-        AppServiceError_2002, //ClientesService
+        AppServiceWarning_2001, //ClientesService
+        AppServiceWarning_2002, //ClientesService
     }
 }

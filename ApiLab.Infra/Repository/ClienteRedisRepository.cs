@@ -12,9 +12,6 @@ namespace ApiLab.Infra.Repository
 
         public async Task<Guid> CreateAsync(Cliente cliente)
         {
-            if (cliente.Id == Guid.Empty)
-                cliente.Id = Guid.CreateVersion7();
-
             string key = $"{Constants.REDIS_CLIENTE_KEY_PREFIX}{cliente.Id}";
             string clienteJson = JsonSerializer.Serialize(cliente);
 

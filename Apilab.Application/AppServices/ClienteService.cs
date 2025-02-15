@@ -27,7 +27,7 @@ namespace Apilab.Application.AppServices
             {
                 var erros = string.Join(" ", validationResult.Errors);
 
-                _logManager.AddWarning(Issues.AppServiceError_2001, erros);
+                _logManager.AddWarning(Issues.AppServiceWarning_2001, erros);
 
                 return await Task.FromResult(erros);
             }
@@ -59,7 +59,7 @@ namespace Apilab.Application.AppServices
             {
                 var erros = string.Join(" ", validationResult.Errors);
 
-                _logManager.AddWarning(Issues.AppServiceError_2002, erros);
+                _logManager.AddWarning(Issues.AppServiceWarning_2002, erros);
 
                 return await Task.FromResult(erros);
             }

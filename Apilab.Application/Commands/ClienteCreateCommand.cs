@@ -1,16 +1,17 @@
-﻿using ApiLab.Domain.Entities;
+﻿using Apilab.Application.Commands.Interfaces;
+using ApiLab.Domain.Entities;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Apilab.Application.Commands
 {
     [ExcludeFromCodeCoverage]
-    public class ClienteCreateCommand
+    public class ClienteCreateCommand : IClienteCommand
     {
         public string Nome { get; set; } = string.Empty;
 
         public string Email { get; set; } = string.Empty;
 
-        
+
         public static implicit operator Cliente(ClienteCreateCommand command)
         {
             return new Cliente

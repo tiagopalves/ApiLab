@@ -70,6 +70,42 @@ namespace ApiLab.CrossCutting.Resources {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Api Key validada e autorizada!.
+        /// </summary>
+        public static string ApiKeyValidationAuthorized {
+            get {
+                return ResourceManager.GetString("ApiKeyValidationAuthorized", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Erro na validação da Api Key!.
+        /// </summary>
+        public static string ApiKeyValidationError {
+            get {
+                return ResourceManager.GetString("ApiKeyValidationError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Acesso não autorizado para a Api Key informada!.
+        /// </summary>
+        public static string ApiKeyValidationNotAuthorized {
+            get {
+                return ResourceManager.GetString("ApiKeyValidationNotAuthorized", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Api Key não encontrada, acesso nao autorizado!.
+        /// </summary>
+        public static string ApiKeyValidationNotFound {
+            get {
+                return ResourceManager.GetString("ApiKeyValidationNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Encerrando a aplicação....
         /// </summary>
         public static string AppEnding {

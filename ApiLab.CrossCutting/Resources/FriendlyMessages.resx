@@ -150,4 +150,16 @@
   <data name="ErrorTitlePayload" xml:space="preserve">
     <value>Erro no payload de entrada!</value>
   </data>
+  <data name="ApiKeyValidationNotFound" xml:space="preserve">
+    <value>Api Key não encontrada, acesso nao autorizado!</value>
+  </data>
+  <data name="ApiKeyValidationNotAuthorized" xml:space="preserve">
+    <value>Acesso não autorizado para a Api Key informada!</value>
+  </data>
+  <data name="ApiKeyValidationError" xml:space="preserve">
+    <value>Erro na validação da Api Key!</value>
+  </data>
+  <data name="ApiKeyValidationAuthorized" xml:space="preserve">
+    <value>Api Key validada e autorizada!</value>
+  </data>
 </root>

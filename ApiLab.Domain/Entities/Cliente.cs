@@ -2,7 +2,7 @@
 {
     public class Cliente
     {
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } = Guid.CreateVersion7();
 
         public string Nome { get; set; } = string.Empty;
         

@@ -9,5 +9,7 @@
         public const string TRACE_ID_PROBLEM_KEY = "traceId";
         
         public const string REDIS_CLIENTE_KEY_PREFIX = "Cliente";
+
+        public const string CLIENTES_ENDPOINT = "/clientes/";
     }
 }

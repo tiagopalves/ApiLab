@@ -29,6 +29,7 @@ try
     builder.Services.Configure<RedisConfiguration>(builder.Configuration.GetSection(nameof(RedisConfiguration)));
 
     var commonConfiguration = builder.Configuration.GetRequiredSection(nameof(CommonConfiguration)).Get<CommonConfiguration>();
+    var accessConfiguration = builder.Configuration.GetRequiredSection(nameof(AccessConfiguration)).Get<AccessConfiguration>();
     var healthChecksConfiguration = builder.Configuration.GetRequiredSection(nameof(HealthChecksConfiguration)).Get<HealthChecksConfiguration>();
     var redisConfiguration = builder.Configuration.GetRequiredSection(nameof(RedisConfiguration)).Get<RedisConfiguration>();
 
@@ -45,15 +46,8 @@ try
 
     builder.Host.UseSerilog();
 
-    builder.Services.AddControllers(options =>
-    {
-        options.Filters.Add<ApiKeyValidationFilter>();
-    });
-    builder.Services.AddOpenApi();
-    //builder.Services.AddSwaggerGen(); //Forma antiga de usar o swagger
-
     //JwtBearer Authentication
-    if (commonConfiguration is not null && !string.IsNullOrEmpty(commonConfiguration.ApiSecurityKey))
+    if (accessConfiguration is not null && !string.IsNullOrEmpty(accessConfiguration.ApiTokenSecurityKey))
     {
         builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
@@ -64,11 +58,18 @@ try
                     ValidateAudience = false,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(commonConfiguration.ApiSecurityKey))
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(accessConfiguration.ApiTokenSecurityKey))
                 };
             });
         builder.Services.AddAuthorization();
     }
+
+    builder.Services.AddControllers(options =>
+    {
+        options.Filters.Add<ApiKeyValidationFilter>();
+    });
+    builder.Services.AddOpenApi();
+    //builder.Services.AddSwaggerGen(); //Forma antiga de usar o swagger
 
     //HealthChecks
     builder.Services.AddHealthChecks()

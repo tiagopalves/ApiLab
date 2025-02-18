@@ -162,4 +162,7 @@
   <data name="ApiKeyValidationAuthorized" xml:space="preserve">
     <value>Api Key validada e autorizada!</value>
   </data>
+  <data name="TokenGenerationError" xml:space="preserve">
+    <value>Não foi possível gerar o token de acesso!</value>
+  </data>
 </root>

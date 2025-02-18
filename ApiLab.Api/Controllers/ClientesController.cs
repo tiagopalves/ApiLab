@@ -1,22 +1,25 @@
 using Apilab.Application.AppServices.Interfaces;
 using Apilab.Application.Commands;
+using ApiLab.CrossCutting.Common.Constants;
 using ApiLab.CrossCutting.LogManager.Interfaces;
 using ApiLab.CrossCutting.Resources;
 using ApiLab.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ApiLab.Api.Controllers
 {
     [ApiController]
-    //[Authorize]
+    [Authorize]
     [Route("[controller]")]
     public class ClientesController(ILogManager logManager, IClienteService clienteService) : ControllerBase
     {
         private readonly ILogManager _logManager = logManager;
         private readonly IClienteService _clienteService = clienteService;
 
-        //TODO: Criar padronizar retornos, ajustar autorização, etc.
+        //TODO: Padronizar retornos
+        //TODO: Centralizar tratamento de erros na ApiControllerBase
 
         [HttpPost]
         [ProducesResponseType(typeof(ClienteCreateCommand), StatusCodes.Status201Created)]
@@ -31,7 +34,7 @@ namespace ApiLab.Api.Controllers
                 bool isValid = Guid.TryParse(retorno, out Guid id);
                 
                 if (isValid && id != Guid.Empty)
-                    return TypedResults.Created($"/clientes/{id}", id);
+                    return TypedResults.Created($"{Constants.CLIENTES_ENDPOINT}{id}", id);
                 else
                     return TypedResults.BadRequest(new ProblemDetails
                     {
@@ -44,7 +47,6 @@ namespace ApiLab.Api.Controllers
             {
                 _logManager.AddError(CrossCutting.Issuer.Issues.ControllerError_4001, $"{FriendlyMessages.ErrorEndpoint} {nameof(CreateAsync)}!", ex);
 
-                //TODO: Centralizar tratamento de erros na Api Controller
                 return TypedResults.BadRequest(new ProblemDetails
                 {
                     Title = FriendlyMessages.ErrorTitle,

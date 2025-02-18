@@ -10,10 +10,8 @@ namespace ApiLab.CrossCutting.LogManager.Extensions
     {
         public static IServiceCollection AddLoggingService(this IServiceCollection services)
         {
-            //TODO: Verificar o melhor local para essas injeções
             services.AddSingleton<IIssuer, Issuer.Issuer>();
             services.AddSingleton<ILogManager, LogManager>();
-
             services.AddSingleton<ILogService, LogService>();
 
             return services;

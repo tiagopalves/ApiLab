@@ -178,6 +178,15 @@ namespace ApiLab.CrossCutting.Resources {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Não foi possível gerar o token de acesso!.
+        /// </summary>
+        public static string TokenGenerationError {
+            get {
+                return ResourceManager.GetString("TokenGenerationError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a não é válido!.
         /// </summary>
         public static string ValidatorInvalid {

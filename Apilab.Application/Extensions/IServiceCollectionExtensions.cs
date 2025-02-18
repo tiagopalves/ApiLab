@@ -11,6 +11,8 @@ namespace Apilab.Application.Extensions
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
             services.AddScoped<IClienteService, ClienteService>();
+            services.AddScoped<ITokenService, TokenService>();
+
             return services;
         }
     }

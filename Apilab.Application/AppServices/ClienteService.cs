@@ -18,7 +18,8 @@ namespace Apilab.Application.AppServices
         private readonly IValidator<ClienteCreateCommand> _clienteCreateCommandValidator = clienteCreateCommandValidator;
         private readonly IValidator<ClienteUpdateCommand> _clienteUpdateCommandValidator = clienteUpdateCommandValidator;
 
-        //TODO: Padronizar e alterar retorno da camada de serviço
+        //TODO: Padronizar e alterar retorno da camada de serviço, avaliar uso de nova classe ServiceResult
+        //TODO: Criar testes unitários
 
         public async Task<string> CreateAsync(ClienteCreateCommand cliente)
         {

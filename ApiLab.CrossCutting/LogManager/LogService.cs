@@ -44,15 +44,17 @@ namespace ApiLab.CrossCutting.LogManager
 
         private void WriteLog(LogEventLevel level, string message, Exception? exception = null, object? data = null, string? correlationId = null, string? flowId = null)
         {
-            using (LogContext.PushProperty(Constants.CORRELATION_HEADER_KEY, correlationId ?? string.Empty))
-            using (LogContext.PushProperty(Constants.FLOW_ID_HEADER_KEY, flowId ?? string.Empty))
-            {
-                var msg = "{@InformationData}";
-                var sep = data != null ? " - " : string.Empty;
-                msg = $"{message}{sep}{msg}";
+            if (!string.IsNullOrEmpty(correlationId))
+                LogContext.PushProperty(Constants.CORRELATION_HEADER_KEY, correlationId);
 
-                _logger.Log(logLevel: (LogLevel)level, message: msg, args: data ?? string.Empty, exception: exception);
-            }
+            if (!string.IsNullOrEmpty(flowId))
+                LogContext.PushProperty(Constants.FLOW_ID_HEADER_KEY, flowId);
+
+            var msg = "{@InformationData}";
+            var sep = data != null ? " - " : string.Empty;
+            msg = $"{message}{sep}{msg}";
+
+            _logger.Log(logLevel: (LogLevel)level, message: msg, args: data ?? string.Empty, exception: exception);
         }
     }
 }

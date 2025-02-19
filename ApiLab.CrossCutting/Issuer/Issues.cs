@@ -19,7 +19,11 @@
         ControllerError_4005, //ClientesController
         ControllerError_4006, //ClientesController
 
-        AppServiceWarning_2001, //ClientesService
-        AppServiceWarning_2002, //ClientesService
+        ControllerWarning_2001, //ClientesController
+        ControllerWarning_2002, //ClientesController
+        ControllerWarning_2003, //ClientesController
+        ControllerWarning_2004, //ClientesController
+        ControllerWarning_2005, //ClientesController
+        ControllerWarning_2006, //ClientesController
     }
 }

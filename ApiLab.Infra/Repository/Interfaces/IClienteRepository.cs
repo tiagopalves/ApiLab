@@ -12,7 +12,7 @@ namespace ApiLab.Infra.Repository.Interfaces
 
         Task<List<Cliente>> GetAllAsync();
      
-        Task<bool> UpdateAsync(Cliente cliente);
+        Task<Guid?> UpdateAsync(Cliente cliente);
         
         Task<bool> DeleteAsync(Guid id);
     }

@@ -165,4 +165,10 @@
   <data name="TokenGenerationError" xml:space="preserve">
     <value>Não foi possível gerar o token de acesso!</value>
   </data>
+  <data name="ClienteNotFound" xml:space="preserve">
+    <value>Cliente não encontrado!</value>
+  </data>
+  <data name="ClientesNotFound" xml:space="preserve">
+    <value>Clientes não encontrados!</value>
+  </data>
 </root>

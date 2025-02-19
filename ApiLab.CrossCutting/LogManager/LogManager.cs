@@ -58,6 +58,5 @@ namespace ApiLab.CrossCutting.LogManager
                 }, _issuer.Prefix);
             }
         }
-
     }
 }

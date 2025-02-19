@@ -133,6 +133,24 @@ namespace ApiLab.CrossCutting.Resources {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Cliente não encontrado!.
+        /// </summary>
+        public static string ClienteNotFound {
+            get {
+                return ResourceManager.GetString("ClienteNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Clientes não encontrados!.
+        /// </summary>
+        public static string ClientesNotFound {
+            get {
+                return ResourceManager.GetString("ClientesNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Erro na chamada do endpoint.
         /// </summary>
         public static string ErrorEndpoint {

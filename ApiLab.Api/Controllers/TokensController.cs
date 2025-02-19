@@ -16,14 +16,15 @@ namespace ApiLab.Api.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public Results<Ok<string>, BadRequest<ProblemDetails>> GetToken()
         {
             try
             {
-                var retorno = _tokenService.GenerateToken();
+                var result = _tokenService.GenerateToken();
 
-                if (!string.IsNullOrEmpty(retorno))
-                    return TypedResults.Ok(retorno);
+                if (!string.IsNullOrEmpty(result))
+                    return TypedResults.Ok(result);
                 else
                     return TypedResults.BadRequest(new ProblemDetails
                     {

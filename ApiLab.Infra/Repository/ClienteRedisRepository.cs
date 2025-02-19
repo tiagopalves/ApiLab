@@ -15,15 +15,19 @@ namespace ApiLab.Infra.Repository
             string key = $"{Constants.REDIS_CLIENTE_KEY_PREFIX}{cliente.Id}";
             string clienteJson = JsonSerializer.Serialize(cliente);
 
-            var saved = await _db.StringSetAsync(key, clienteJson);
+            var transaction = _db.CreateTransaction();
+            transaction.AddCondition(Condition.KeyNotExists(key));
 
-            if (saved)
+            List<Task> tasks = [
+                transaction.StringSetAsync(key, clienteJson),
+                transaction.SetAddAsync($"{Constants.REDIS_CLIENTE_KEY_PREFIX}all", cliente.Id.ToString()), // Adiciona o ID do cliente a um set para facilitar listagem
+                transaction.StringSetAsync($"{Constants.REDIS_CLIENTE_KEY_PREFIX}email:{cliente.Email}", cliente.Id.ToString())]; // Cria um índice pelo email para busca
+
+            // Aguarda a conclusão das operações na ordem definida
+            if (await transaction.ExecuteAsync())
             {
-                // Adiciona o ID do cliente a um set para facilitar listagem
-                await _db.SetAddAsync($"{Constants.REDIS_CLIENTE_KEY_PREFIX}all", cliente.Id.ToString());
-
-                // Cria um índice pelo email para busca
-                await _db.StringSetAsync($"{Constants.REDIS_CLIENTE_KEY_PREFIX}email:{cliente.Email}", cliente.Id.ToString());
+                foreach (var task in tasks)
+                    await task;
 
                 return cliente.Id;
             }
@@ -70,57 +74,73 @@ namespace ApiLab.Infra.Repository
             return clientes;
         }
 
-        public async Task<bool> UpdateAsync(Cliente cliente)
+        public async Task<Guid?> UpdateAsync(Cliente cliente)
         {
-            if (cliente.Id == Guid.Empty)
-                return false;
-
             string key = $"{Constants.REDIS_CLIENTE_KEY_PREFIX}{cliente.Id}";
 
-            // Obtém e remove o cliente atual em uma única operação
-            var clienteJsonAtual = await _db.StringGetDeleteAsync(key);
-
+            var clienteJsonAtual = await _db.StringGetAsync(key);
             if (clienteJsonAtual.IsNull)
-                return false;
+                return null;
 
             var clienteAtual = JsonSerializer.Deserialize<Cliente>(clienteJsonAtual.ToString());
             string clienteJsonNovo = JsonSerializer.Serialize(cliente);
 
             var transaction = _db.CreateTransaction();
+            transaction.AddCondition(Condition.KeyExists(key));
+            
+            List<Task> tasks = [];
 
             // Remove o índice do email antigo se mudou
             if (clienteAtual?.Email != cliente.Email)
             {
                 // Remove o índice do email antigo e adiciona o índice do novo email
-                transaction.KeyDeleteAsync($"{Constants.REDIS_CLIENTE_KEY_PREFIX}email:{clienteAtual?.Email}");
-                transaction.StringSetAsync($"{Constants.REDIS_CLIENTE_KEY_PREFIX}email:{cliente.Email}", cliente.Id.ToString());
+                tasks.Add(transaction.KeyDeleteAsync($"{Constants.REDIS_CLIENTE_KEY_PREFIX}email:{clienteAtual?.Email}"));
+                tasks.Add(transaction.StringSetAsync($"{Constants.REDIS_CLIENTE_KEY_PREFIX}email:{cliente.Email}", cliente.Id.ToString()));
             }
 
             // Atualiza os dados do cliente
-            transaction.StringSetAsync(key, clienteJsonNovo);
+            tasks.Add(transaction.StringSetAsync(key, clienteJsonNovo));
 
-            return await transaction.ExecuteAsync();
+            // Aguarda a conclusão das operações na ordem definida
+            if (await transaction.ExecuteAsync())
+            {
+                foreach (var task in tasks)
+                    await task;
+                
+                return cliente.Id;
+            }
+
+            return Guid.Empty;
         }
 
         public async Task<bool> DeleteAsync(Guid id)
         {
             string key = $"{Constants.REDIS_CLIENTE_KEY_PREFIX}{id}";
 
-            // Obtém e remove o cliente em uma única operação
-            var clienteJson = await _db.StringGetDeleteAsync(key);
-
+            var clienteJson = await _db.StringGetAsync(key);
             if (clienteJson.IsNull)
                 return false;
 
             var cliente = JsonSerializer.Deserialize<Cliente>(clienteJson.ToString());
 
             var transaction = _db.CreateTransaction();
+            transaction.AddCondition(Condition.KeyExists(key));
 
-            // Remove os índices 
-            transaction.SetRemoveAsync($"{Constants.REDIS_CLIENTE_KEY_PREFIX}all", id.ToString());
-            transaction.KeyDeleteAsync($"{Constants.REDIS_CLIENTE_KEY_PREFIX}email:{cliente?.Email}");
+            List<Task> tasks = [
+                transaction.StringGetDeleteAsync(key),
+                transaction.SetRemoveAsync($"{Constants.REDIS_CLIENTE_KEY_PREFIX}all", id.ToString()),
+                transaction.KeyDeleteAsync($"{Constants.REDIS_CLIENTE_KEY_PREFIX}email:{cliente?.Email}")];
 
-            return await transaction.ExecuteAsync();
+            // Aguarda a conclusão das operações na ordem definida
+            if (await transaction.ExecuteAsync())
+            {
+                foreach (var task in tasks)
+                    await task;
+            
+                return true;
+            }
+
+            return false;
         }
     }
 }

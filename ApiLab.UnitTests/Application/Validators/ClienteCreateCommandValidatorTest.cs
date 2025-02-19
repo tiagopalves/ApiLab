@@ -39,7 +39,7 @@ namespace ApiLab.UnitTests.Application.Validators
         public void Should_Fail_When_Nome_Is_Empty(string? nome)
         {
             // Arrange
-            var command = new ClienteCreateCommand { Nome = nome };
+            var command = new ClienteCreateCommand { Nome = nome ?? string.Empty };
 
             // Act
             var result = _validator.TestValidate(command);

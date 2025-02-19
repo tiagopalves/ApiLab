@@ -39,6 +39,7 @@ try
 
     //Serilog
     Log.Logger = new LoggerConfiguration()
+         //.Enrich.FromLogContext()
         .ReadFrom.Configuration(builder.Configuration)
         .CreateLogger();
 

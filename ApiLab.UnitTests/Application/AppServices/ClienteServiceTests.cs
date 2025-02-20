@@ -1,6 +1,6 @@
 ﻿namespace ApiLab.UnitTests.Application.AppServices
 {
-    public class TokenServiceTest
+    public class ClienteServiceTests
     {
         [Fact]
         public void Test1()

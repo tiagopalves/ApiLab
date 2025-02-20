@@ -1,6 +1,6 @@
 ﻿namespace ApiLab.UnitTests.CrossCutting.LogManager
 {
-    public class LogManagerTest
+    public class LogManagerTests
     {
 
         [Fact]

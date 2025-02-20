@@ -6,23 +6,24 @@ using FluentValidation.TestHelper;
 
 namespace ApiLab.UnitTests.Application.Validators
 {
-    public class ClienteCreateCommandValidatorTest
+    public class ClienteUpdateCommandValidatorTests
     {
-        private readonly ClienteCreateCommandValidator _validator;
+        private readonly ClienteUpdateCommandValidator _validator;
 
-        public ClienteCreateCommandValidatorTest()
+        public ClienteUpdateCommandValidatorTests()
         {
-            _validator = new ClienteCreateCommandValidator();
+            _validator = new ClienteUpdateCommandValidator();
         }
 
         [Fact]
         public void Should_Pass_When_Command_Is_Valid()
         {
             // Arrange
-            var command = new ClienteCreateCommand
+            var command = new ClienteUpdateCommand
             {
+                Id = Guid.CreateVersion7(),
                 Nome = "João Silva",
-                Email = "joao@email.com",
+                Email = "joao@email.com"
             };
 
             // Act
@@ -32,6 +33,25 @@ namespace ApiLab.UnitTests.Application.Validators
             result.ShouldNotHaveAnyValidationErrors();
         }
 
+        [Fact]
+        public void Should_Fail_When_Id_Is_Empty()
+        {
+            // Arrange
+            var command = new ClienteUpdateCommand
+            {
+                Id = Guid.Empty,
+                Nome = "João Silva",
+                Email = "joao@email.com"
+            };
+
+            // Act
+            var result = _validator.TestValidate(command);
+
+            // Assert
+            result.ShouldHaveValidationErrorFor(x => x.Id)
+                  .WithErrorMessage($"{nameof(Cliente.Id)} {FriendlyMessages.ValidatorRequired}");
+        }
+
         [Theory]
         [InlineData("")]
         [InlineData(" ")]
@@ -39,7 +59,7 @@ namespace ApiLab.UnitTests.Application.Validators
         public void Should_Fail_When_Nome_Is_Empty(string? nome)
         {
             // Arrange
-            var command = new ClienteCreateCommand { Nome = nome ?? string.Empty };
+            var command = new ClienteUpdateCommand { Nome = nome ?? string.Empty };
 
             // Act
             var result = _validator.TestValidate(command);
@@ -57,7 +77,7 @@ namespace ApiLab.UnitTests.Application.Validators
         public void Should_Fail_When_Email_Is_Invalid(string email)
         {
             // Arrange
-            var command = new ClienteCreateCommand { Email = email };
+            var command = new ClienteUpdateCommand { Email = email };
 
             // Act
             var result = _validator.TestValidate(command);

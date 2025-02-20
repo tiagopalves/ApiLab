@@ -1,5 +1,8 @@
-﻿namespace ApiLab.CrossCutting.Configurations
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace ApiLab.CrossCutting.Configurations
 {
+    [ExcludeFromCodeCoverage]
     public class HealthChecksConfiguration
     {
         public int EvaluationTimeInSeconds { get; set; }

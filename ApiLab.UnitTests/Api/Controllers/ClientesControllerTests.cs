@@ -1,6 +1,6 @@
 ﻿namespace ApiLab.UnitTests.Api.Controllers
 {
-    public class ClientesControllerTest
+    public class ClientesControllerTests
     {
         [Fact]
         public void Test1()

@@ -13,15 +13,17 @@ namespace ApiLab.Infra.Repository
         public async Task<Guid> CreateAsync(Cliente cliente)
         {
             string key = $"{Constants.REDIS_CLIENTE_KEY_PREFIX}{cliente.Id}";
+            string emailKey = $"{Constants.REDIS_CLIENTE_KEY_PREFIX}email:{cliente.Email}";
             string clienteJson = JsonSerializer.Serialize(cliente);
 
             var transaction = _db.CreateTransaction();
             transaction.AddCondition(Condition.KeyNotExists(key));
+            transaction.AddCondition(Condition.KeyNotExists(emailKey));
 
             List<Task> tasks = [
                 transaction.StringSetAsync(key, clienteJson),
                 transaction.SetAddAsync($"{Constants.REDIS_CLIENTE_KEY_PREFIX}all", cliente.Id.ToString()), // Adiciona o ID do cliente a um set para facilitar listagem
-                transaction.StringSetAsync($"{Constants.REDIS_CLIENTE_KEY_PREFIX}email:{cliente.Email}", cliente.Id.ToString())]; // Cria um índice pelo email para busca
+                transaction.StringSetAsync(emailKey, cliente.Id.ToString())]; // Cria um índice pelo email para busca
 
             // Aguarda a conclusão das operações na ordem definida
             if (await transaction.ExecuteAsync())
@@ -38,19 +40,19 @@ namespace ApiLab.Infra.Repository
         public async Task<Cliente?> GetByIdAsync(Guid id)
         {
             string key = $"{Constants.REDIS_CLIENTE_KEY_PREFIX}{id}";
-            string? clienteJson = await _db.StringGetAsync(key);
+            var clienteJson = await _db.StringGetAsync(key);
 
-            if (string.IsNullOrEmpty(clienteJson))
+            if (clienteJson.IsNull)
                 return null;
 
-            return JsonSerializer.Deserialize<Cliente>(clienteJson);
+            return JsonSerializer.Deserialize<Cliente>(clienteJson.ToString());
         }
 
         public async Task<Cliente?> GetByEmailAsync(string email)
         {
-            string? clienteId = await _db.StringGetAsync($"{Constants.REDIS_CLIENTE_KEY_PREFIX}email:{email}");
+            var clienteId = await _db.StringGetAsync($"{Constants.REDIS_CLIENTE_KEY_PREFIX}email:{email}");
 
-            if (string.IsNullOrEmpty(clienteId) || !Guid.TryParse(clienteId, out Guid id))
+            if (clienteId.IsNull || !Guid.TryParse(clienteId, out Guid id))
                 return null;
 
             return await GetByIdAsync(id);
@@ -58,20 +60,29 @@ namespace ApiLab.Infra.Repository
 
         public async Task<List<Cliente>> GetAllAsync()
         {
-            var clientes = new List<Cliente>();
+            var result = new List<Cliente>();
             var clienteIds = await _db.SetMembersAsync($"{Constants.REDIS_CLIENTE_KEY_PREFIX}all");
 
-            foreach (var idRedis in clienteIds)
+            if (clienteIds.Length == 0)
+                return result;
+
+            var keys = clienteIds.Select(id => (RedisKey)$"{Constants.REDIS_CLIENTE_KEY_PREFIX}{id}").ToArray();
+
+            // Busca todos os clientes em uma única operação
+            var clientesJson = await _db.StringGetAsync(keys);
+
+            foreach (var json in clientesJson)
             {
-                if (Guid.TryParse(idRedis.ToString(), out Guid id))
+                if (!json.IsNull)
                 {
-                    var cliente = await GetByIdAsync(id);
-                    if (cliente != null)
-                        clientes.Add(cliente);
+                    var cliente = JsonSerializer.Deserialize<Cliente>(json.ToString());
+                    
+                    if (cliente is not null)
+                        result.Add(cliente);
                 }
             }
 
-            return clientes;
+            return result;
         }
 
         public async Task<Guid?> UpdateAsync(Cliente cliente)

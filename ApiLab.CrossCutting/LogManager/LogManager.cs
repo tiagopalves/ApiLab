@@ -26,7 +26,6 @@ namespace ApiLab.CrossCutting.LogManager
         public void AddError(Issues issue, string message, Exception? ex = null, string correlationId = "", string flowId = "", object? informationData = null)
         {
             LogServiceWrite(LoggingLevel.Error, message, correlationId, flowId, informationData, issue, ex);
-
         }
 
         [ExcludeFromCodeCoverage]

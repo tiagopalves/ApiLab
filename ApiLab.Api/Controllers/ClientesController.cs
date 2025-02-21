@@ -19,8 +19,6 @@ namespace ApiLab.Api.Controllers
         private readonly ILogManager _logManager = logManager;
         private readonly IClienteService _clienteService = clienteService;
 
-        //TODO: Criar testes unitários restantes
-
         [HttpPost]
         [ProducesResponseType(typeof(ClienteCreateCommand), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]

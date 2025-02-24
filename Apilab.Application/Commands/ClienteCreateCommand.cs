@@ -1,10 +1,8 @@
 ﻿using Apilab.Application.Commands.Interfaces;
 using ApiLab.Domain.Entities;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Apilab.Application.Commands
 {
-    [ExcludeFromCodeCoverage]
     public class ClienteCreateCommand : IClienteCommand
     {
         public string Nome { get; set; } = string.Empty;

@@ -1,6 +1,79 @@
-@ApiLab_HostAddress = http://localhost:5092
+### ApiLab.http
 
-GET {{ApiLab_HostAddress}}/lab/
+@baseUrl = https://localhost:7206
+@token = copiar_o_token_aqui_sem_aspas
+@clienteId = copiar_o_id_aqui
+@email = copiar_o_email_aqui
+
+#### Get Token
+GET {{baseUrl}}/Tokens
 Accept: application/json
+ApiKey: ApiKeyAuthorized
+CorrelationId: GetToken
+FlowId: "bdea875c-fd22-4b92-969f-0b86d9937f64"
 
-###
+> {% client.global.set("token", response.body.substring(1, response.body.length - 1)) %}
+
+#### Create Cliente
+POST {{baseUrl}}/Clientes
+Content-Type: application/json
+Authorization: Bearer {{token}}
+ApiKey: ApiKeyAuthorized
+CorrelationId: CreateCliente
+FlowId: "bdea875c-fd22-4b92-969f-0b86d9937f64"
+
+{
+  "nome": "João Silva",
+  "email": "joao.silva@example.com",
+  "telefone": "123456789",
+  "endereco": "Rua Principal, 123"
+}
+
+#### Get Cliente by ID
+GET {{baseUrl}}/Clientes/{{clienteId}}
+Authorization: Bearer {{token}}
+Accept: application/json
+ApiKey: ApiKeyAuthorized
+CorrelationId: GetClienteById
+FlowId: "bdea875c-fd22-4b92-969f-0b86d9937f64"
+
+#### Get Cliente by Email
+GET {{baseUrl}}/Clientes/email/{{email}}
+Authorization: Bearer {{token}}
+Accept: application/json
+ApiKey: ApiKeyAuthorized
+CorrelationId: GetClienteByEmail
+FlowId: "bdea875c-fd22-4b92-969f-0b86d9937f64"
+
+#### Get All Clientes
+GET {{baseUrl}}/Clientes
+Authorization: Bearer {{token}}
+Accept: application/json
+ApiKey: ApiKeyAuthorized
+CorrelationId: GetAllClientes
+FlowId: "bdea875c-fd22-4b92-969f-0b86d9937f64"
+
+#### Update Cliente
+PUT {{baseUrl}}/Clientes
+Content-Type: application/json
+Authorization: Bearer {{token}}
+ApiKey: ApiKeyAuthorized
+CorrelationId: UpdateCliente
+FlowId: "bdea875c-fd22-4b92-969f-0b86d9937f64"
+
+{
+  "id": "{{clienteId}}",
+  "nome": "João Silva Atualizado",
+  "email": "joao.silva.novo@example.com",
+  "telefone": "987654321",
+  "endereco": "Rua Nova, 456"
+}
+
+#### Delete Cliente
+DELETE {{baseUrl}}/Clientes/{{clienteId}}
+Authorization: Bearer {{token}}
+Accept: application/json
+ApiKey: ApiKeyAuthorized
+CorrelationId: DeleteCliente
+FlowId: "bdea875c-fd22-4b92-969f-0b86d9937f64"
+

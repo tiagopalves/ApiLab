@@ -50,11 +50,21 @@ namespace ApiLab.CrossCutting.LogManager
             if (!string.IsNullOrEmpty(flowId))
                 LogContext.PushProperty(Constants.FLOW_ID_HEADER_KEY, flowId);
 
-            var msg = "{@InformationData}";
-            var sep = data is not null ? " - " : string.Empty;
-            msg = $"{message}{sep}{msg}";
-
-            _logger.Log(logLevel: (LogLevel)level, message: msg, args: data ?? string.Empty, exception: exception);
+            if (data is not null)
+                _logger.Log(
+                    (LogLevel)level,
+                    exception,
+                    "{message} - {@InformationData}",
+                    message,
+                    data
+                );
+            else
+                _logger.Log(
+                    (LogLevel)level,
+                    exception,
+                    "{message}",
+                    message
+                );
         }
     }
 }

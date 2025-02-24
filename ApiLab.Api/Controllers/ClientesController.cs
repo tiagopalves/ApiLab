@@ -16,6 +16,8 @@ namespace ApiLab.Api.Controllers
     [Route("[controller]")]
     public class ClientesController(ILogManager logManager, IClienteService clienteService) : ControllerBase
     {
+        //TODO: Verificar a cobertura de testes com o Coverlet
+
         private readonly ILogManager _logManager = logManager;
         private readonly IClienteService _clienteService = clienteService;
 
@@ -116,7 +118,7 @@ namespace ApiLab.Api.Controllers
             }
             catch (Exception ex)
             {
-                _logManager.AddError(Issues.ControllerError_4002, $"{FriendlyMessages.ErrorEndpoint} {nameof(GetByEmailAsync)}!", ex);
+                _logManager.AddError(Issues.ControllerError_4003, $"{FriendlyMessages.ErrorEndpoint} {nameof(GetByEmailAsync)}!", ex);
 
                 return TypedResults.BadRequest(new ProblemDetails
                 {

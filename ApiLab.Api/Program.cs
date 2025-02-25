@@ -16,6 +16,7 @@ using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
 using Serilog;
 using System.Text;
+using System.Diagnostics.CodeAnalysis;
 
 try
 {

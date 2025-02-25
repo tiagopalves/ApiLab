@@ -1,7 +1,9 @@
 ﻿using ApiLab.CrossCutting.Issuer.Interfaces;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ApiLab.CrossCutting.Issuer
 {
+    [ExcludeFromCodeCoverage]
     public class Issuer : ProtocoloIssuerBase, IIssuer
     {
         public Issuer()

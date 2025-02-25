@@ -1,8 +1,11 @@
-﻿namespace ApiLab.CrossCutting.Issuer
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace ApiLab.CrossCutting.Issuer
 {
+    [ExcludeFromCodeCoverage]
     public class ProtocoloIssuerBase
     {
-        public required IssuerData IssuerData { get; set; }
+        public IssuerData IssuerData { get; set; } = new IssuerData();
 
         public string? Prefix => IssuerData?.Prefix;
         

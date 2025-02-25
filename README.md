@@ -98,6 +98,18 @@ ApiLab/
 4. **Acesse a API:**
    - `https://localhost:7206/scalar/v1`
 
+5. **Gerar relatório de cobertura de testes:**
+
+    - Após a instalação do ReportGenerator: dotnet tool install --global dotnet-reportgenerator-globaltool):
+
+    - Executar os comandos abaixo no PowerShell:
+
+      dotnet test --collect:"XPlat Code Coverage"
+
+      reportgenerator -reports:**/coverage.cobertura.xml -targetdir:coverage-report -reporttypes:Html -filefilters:"-**/ApiLab.Api/Program.cs"
+
+      start coverage-report/index.html
+
 ## 📊 Monitoramento
 
 - Acesse o HealthChecksUI em `https://localhost:7206/healthchecks-ui`

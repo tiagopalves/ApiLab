@@ -116,8 +116,8 @@ try
 
     var app = builder.Build();
 
-    if (app.Environment.IsDevelopment())
-    {
+    //if (app.Environment.IsDevelopment())
+    //{
         //Forma antiga de usar o swagger
         //app.UseSwagger();
         //app.UseSwaggerUI();
@@ -138,7 +138,7 @@ try
                 .WithTheme(ScalarTheme.BluePlanet)
                 .WithDefaultHttpClient(ScalarTarget.CSharp, ScalarClient.HttpClient);
         });
-    }
+    //}
 
     app.UseHttpsRedirection();
     app.UseAuthentication();

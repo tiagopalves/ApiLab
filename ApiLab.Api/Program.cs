@@ -16,7 +16,6 @@ using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
 using Serilog;
 using System.Text;
-using System.Diagnostics.CodeAnalysis;
 
 try
 {
@@ -37,6 +36,12 @@ try
     #endregion
 
     #region Services Configuration
+
+    builder.Host.UseDefaultServiceProvider((context, options) =>
+    {
+        options.ValidateScopes = true;
+        options.ValidateOnBuild = true;
+    });
 
     //Serilog
     Log.Logger = new LoggerConfiguration()
